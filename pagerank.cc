@@ -45,6 +45,20 @@ int main(int argc,char** argv){
 
 	//create array equivalents 
 	
+	int** arr_in_edges; 
+	arr_in_edges = new int* [V];
+	for (int i = 0; i < V; ++i) {
+		arr_in_edges[V] = new int[longest_in_edges]; 
+		for (int j = 0; j < longest_in_edges; j++) {
+			if (j < in_edges[v].size()) {
+				arr_in_edges[i][j] = in_edges[i][j];
+			}
+			else {
+				arr_in_edges[i][j] = -1; 
+			}
+
+		}
+	}
 
 	/*double** temp;
 	temp = new double* [N];

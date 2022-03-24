@@ -2,7 +2,7 @@ ulimit -v 2097152
 
 correct_cnt=0
 
-for i in {1..10}
+for i in {1..3}
 do
 	printf "\nworking on case ${i}:\n"
 	test_data=sample${i}.in
