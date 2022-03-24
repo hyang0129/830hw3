@@ -82,10 +82,19 @@ int main(int argc,char** argv){
 		for(int i = 0;i < V;++i){
 
 			// parallelize this part first 
-			double sum = 0;
+			/*double sum = 0;
 			for(int j = 0;j < in_edges[i].size();++j){
 				int v = in_edges[i][j];
 				sum += pr[current][v] / out_degree[v];
+			}*/
+
+			double sum = 0;
+			for (int j = 0; j < longest_in_edges; ++j) {
+				int v = arr_in_edges[i][j];
+
+				if (v > -1) {
+					sum += pr[current][v] / out_degree[v];
+				}
 			}
 
 
