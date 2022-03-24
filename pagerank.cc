@@ -66,16 +66,15 @@ int main(int argc,char** argv){
 		arr_out_degree[i] = out_degree[i];
 	}
 
-	/*double** temp;
-	temp = new double* [N];
-	for (unsigned i = 0; (i < N); i++)
-	{
-		temp[i] = new double[M];
-		for (unsigned j = 0; (j < M); j++)
-		{
-			temp[i][j] = vals[i][j];
-		}
-	}*/
+	double** arr_pr;
+	arr_pr = new double* [2];
+	arr_pr[0] = new double[v];
+	arr_pr[1] = new double[v];
+
+	int current = 0;
+	for (int i = 0; i < V; ++i) {
+		arr_pr[current][i] = 1.0 / V;
+	}
 
 
 	//cuda allocate PR 
@@ -99,18 +98,18 @@ int main(int argc,char** argv){
 				int v = arr_in_edges[i][j];
 
 				if (v > -1) {
-					sum += pr[current][v] / arr_out_degree[v];
+					sum += arr_pr[current][v] / arr_out_degree[v];
 				}
 			}
 
 
-			pr[next][i] = (1.0 - d) / V + d * sum;
+			arr_pr[next][i] = (1.0 - d) / V + d * sum;
 		}
 		current = next;
 	}
 
 	for(int i = 0;i < V;++i){
-		fprintf(fout,"%.8f\n",pr[current][i]);
+		fprintf(fout,"%.8f\n", arr_pr[current][i]);
 	}
 	fclose(fin);
 	fclose(fout);
