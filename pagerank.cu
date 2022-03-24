@@ -4,32 +4,11 @@
 #include<queue>
 #include<vector>
 
-using namespace std;
-
 const double d = 0.85;
 int V,E,L,M;
 
 std::vector<std::vector<int>> in_edges;
 std::vector<int> out_degree;
-
-//helper functions 
-
-double** toarray(vector<vector<double> >& vals, int N, int M)
-{
-	double** temp;
-	temp = new double* [N];
-	for (unsigned i = 0; (i < N); i++)
-	{
-		temp[i] = new double[M];
-		for (unsigned j = 0; (j < M); j++)
-		{
-			temp[i][j] = vals[i][j];
-		}
-	}
-
-	return temp 
-}
-
 
 int main(int argc,char** argv){
 	FILE* fin = fopen(argv[1],"r");
@@ -38,19 +17,11 @@ int main(int argc,char** argv){
 	in_edges.resize(V);
 	out_degree = std::vector<int>(V,0);
 
-	int longest_in_edges = 0; 
-
 	for(int i = 0;i < E;++i){
 		int u,v;
 		fscanf(fin,"%d%d",&u,&v);
 		in_edges[v].push_back(u);
 		++out_degree[u];
-
-		// compute longest edge
-		if (in_edges[v].size() > longest_in_edges) {
-			longest_in_edges = in_edges[v].size();
-		}
-
 	}
 
 	std::vector<double> pr[2];
@@ -60,38 +31,14 @@ int main(int argc,char** argv){
 	for(int i = 0;i < V;++i){
 		pr[current][i] = 1.0 / V;
 	}
-
-	//create array equivalents 
-	
-	int** arr_in_edges; 
-
-	arr_in_edges = new int* [V];
-	for (unsigned i = 0; (i < V); i++)
-	{
-		arr_in_edges[i] = new double[M];
-		for (unsigned j = 0; (j < M); j++)
-		{
-			temp[i][j] = vals[i][j];
-		}
-	}
-
-	//cuda allocate PR 
-
-	
-
-
 	for(int iter = 0;iter < M;++iter){
 		int next = 1 - current;
 		for(int i = 0;i < V;++i){
-
-			// parallelize this part first 
 			double sum = 0;
 			for(int j = 0;j < in_edges[i].size();++j){
 				int v = in_edges[i][j];
 				sum += pr[current][v] / out_degree[v];
 			}
-
-
 			pr[next][i] = (1.0 - d) / V + d * sum;
 		}
 		current = next;
