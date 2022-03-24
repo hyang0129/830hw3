@@ -1,0 +1,7 @@
+#chmod everything
+chmod u+x *.sh
+
+#compile and run gen
+./compile_generator.sh
+./input_generator
+
