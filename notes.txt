@@ -1,5 +1,6 @@
 #chmod everything
 chmod u+x *.sh
+git reset --hard ; git pull; chmod u+x *.sh
 
 #compile and run gen
 ./compile_generator.sh
