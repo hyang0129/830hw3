@@ -1,1 +1,1 @@
-./pagerank $1 $2
+./pagerank_og $1 $2
