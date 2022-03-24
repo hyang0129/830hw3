@@ -71,7 +71,6 @@ int main(int argc,char** argv){
 	arr_pr[0] = new double[V];
 	arr_pr[1] = new double[V];
 
-	int current = 0;
 	for (int i = 0; i < V; ++i) {
 		arr_pr[current][i] = 1.0 / V;
 	}
