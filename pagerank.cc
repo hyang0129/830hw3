@@ -60,6 +60,12 @@ int main(int argc,char** argv){
 		}
 	}
 
+	int* arr_out_degree;
+	arr_out_degree = new int[V];
+	for (int i = 0; i < V; ++i) {
+		arr_out_degree[i] = out_degree[i]
+	}
+
 	/*double** temp;
 	temp = new double* [N];
 	for (unsigned i = 0; (i < N); i++)
@@ -93,7 +99,7 @@ int main(int argc,char** argv){
 				int v = arr_in_edges[i][j];
 
 				if (v > -1) {
-					sum += pr[current][v] / out_degree[v];
+					sum += pr[current][v] / arr_out_degree[v];
 				}
 			}
 
