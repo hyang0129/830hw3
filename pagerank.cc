@@ -12,24 +12,6 @@ int V,E,L,M;
 std::vector<std::vector<int>> in_edges;
 std::vector<int> out_degree;
 
-//helper functions 
-
-double** toarray(vector<vector<double> >& vals, int N, int M)
-{
-	double** temp;
-	temp = new double* [N];
-	for (unsigned i = 0; (i < N); i++)
-	{
-		temp[i] = new double[M];
-		for (unsigned j = 0; (j < M); j++)
-		{
-			temp[i][j] = vals[i][j];
-		}
-	}
-
-	return temp 
-}
-
 
 int main(int argc,char** argv){
 	FILE* fin = fopen(argv[1],"r");
@@ -63,17 +45,7 @@ int main(int argc,char** argv){
 
 	//create array equivalents 
 	
-	int** arr_in_edges; 
 
-	arr_in_edges = new int* [V];
-	for (unsigned i = 0; (i < V); i++)
-	{
-		arr_in_edges[i] = new double[M];
-		for (unsigned j = 0; (j < M); j++)
-		{
-			temp[i][j] = vals[i][j];
-		}
-	}
 
 	//cuda allocate PR 
 
