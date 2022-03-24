@@ -46,6 +46,17 @@ int main(int argc,char** argv){
 	//create array equivalents 
 	
 
+	/*double** temp;
+	temp = new double* [N];
+	for (unsigned i = 0; (i < N); i++)
+	{
+		temp[i] = new double[M];
+		for (unsigned j = 0; (j < M); j++)
+		{
+			temp[i][j] = vals[i][j];
+		}
+	}*/
+
 
 	//cuda allocate PR 
 
