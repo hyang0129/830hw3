@@ -68,8 +68,8 @@ int main(int argc,char** argv){
 
 	double** arr_pr;
 	arr_pr = new double* [2];
-	arr_pr[0] = new double[v];
-	arr_pr[1] = new double[v];
+	arr_pr[0] = new double[V];
+	arr_pr[1] = new double[V];
 
 	int current = 0;
 	for (int i = 0; i < V; ++i) {
