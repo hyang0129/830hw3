@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
 	//create array equivalents 
 
 	int* flat_edges = (int*)malloc(E * sizeof(int));
-	int edge_starts[V+1]; 
+	int edge_starts[V + 1];
 
 	int pos = 0; 
 
@@ -96,7 +96,7 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	edge_starts[V + 1] = E; 
+	edge_starts[V] = E; 
 
 	cout << E;
 	cout << endl;
