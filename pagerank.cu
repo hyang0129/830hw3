@@ -95,12 +95,25 @@ int main(int argc, char** argv) {
 
 	int* flat_edges = (int*)malloc(E * sizeof(int));
 	int* edge_starts = new int[V + 1];
+	int* arr_out_degree = new int[V];
+	double* arr_pr  = new double[V*2];
+	//double arr_pr[V * 2];
 
-	int pos = 0; 
+
+	
+	////cuda allocate PR 
+	cudaMallocManaged(&flat_edges, E * sizeof(int));
+	cudaMallocManaged(&edge_starts, (V + 1) * sizeof(int));
+	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
+	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
+
+
+	//assign 
+	int pos = 0;
 
 	for (int i = 0; i < V; ++i) {
-		
-		edge_starts[i] = pos; 
+
+		edge_starts[i] = pos;
 
 		for (int j = 0; j < in_edges[i].size(); j++) {
 			flat_edges[pos] = in_edges[i][j];
@@ -111,25 +124,16 @@ int main(int argc, char** argv) {
 		}
 	}
 
-	edge_starts[V] = E; 
+	edge_starts[V] = E;
 
-	int* arr_out_degree = new int[V];
 	for (int i = 0; i < V; ++i) {
 		arr_out_degree[i] = out_degree[i];
 	}
 
-	double* arr_pr  = new double[V*2];
-	//double arr_pr[V * 2];
 	for (int i = 0; i < V; ++i) {
-		arr_pr[i+current*V] = 1.0 / V;
+		arr_pr[i + current * V] = 1.0 / V;
 	}
 
-	
-	////cuda allocate PR 
-	cudaMallocManaged(&flat_edges, E * sizeof(int));
-	cudaMallocManaged(&edge_starts, (V + 1) * sizeof(int));
-	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
-	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
 
 
 	for (int iter = 0; iter < M; ++iter) {
@@ -169,8 +173,8 @@ int main(int argc, char** argv) {
 	cudaDeviceSynchronize();
 
 	for (int i = 0; i < V * 2; ++i) {
-		//cout << arr_pr[i];
-		cout << edge_starts[i];
+		cout << arr_pr[i];
+		//cout << edge_starts[i];
 
 		cout << endl;
 	}
