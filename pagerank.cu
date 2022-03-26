@@ -93,6 +93,8 @@ int main(int argc, char** argv) {
 
 	edge_starts[V + 1] = E; 
 
+
+
 	int** arr_in_edges = (int**)malloc(V * sizeof(int*));
 	int arr_in_edges_count[V];
 
@@ -127,8 +129,16 @@ int main(int argc, char** argv) {
 		int next = 1 - current;
 		for (int i = 0; i < V; ++i) {
 			double sum = 0;
-			for (int j = 0; j < arr_in_edges_count[i]; ++j) {
-				int v = arr_in_edges[i][j];
+			//for (int j = 0; j < arr_in_edges_count[i]; ++j) {
+			//	int v = arr_in_edges[i][j];
+			//	sum += arr_pr[current][v] / arr_out_degree[v];
+			//}
+
+			int start = edge_starts[i]; 
+			int end = edge_starts[i+1];
+
+			for (int j = start; j < end; ++j) {
+				int v = flat_edges[j];
 				sum += arr_pr[current][v] / arr_out_degree[v];
 			}
 
