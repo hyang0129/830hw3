@@ -91,15 +91,17 @@ int main(int argc, char** argv) {
 			flat_edges[pos] = in_edges[i][j];
 			++pos;
 
-			cout << pos;
-			cout << endl;
+
 
 		}
 	}
 
 	edge_starts[V + 1] = E; 
 
-
+	for (int i = 0; i < V; ++i) {
+		cout << edge_starts[i];
+		cout << endl;
+	}
 
 	int** arr_in_edges = (int**)malloc(V * sizeof(int*));
 	int arr_in_edges_count[V];
