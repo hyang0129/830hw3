@@ -45,16 +45,16 @@ int main(int argc, char** argv) {
 
 	//create array equivalents 
 
-	int** arr_in_edges = (int**) malloc(V * sizeof(int*));
+	//int** arr_in_edges = (int**) malloc(V * sizeof(int*));
 
-	for (int i = 0; i < V; ++i) {
-		arr_in_edges[V] = (int*) malloc(in_edges[i].size() * sizeof(int));
+	//for (int i = 0; i < V; ++i) {
+	//	arr_in_edges[V] = (int*) malloc(in_edges[i].size() * sizeof(int));
 
-		for (int j = 0; j < in_edges[i].size(); j++) {
-			arr_in_edges[i][j] = in_edges[i][j];
+	//	for (int j = 0; j < in_edges[i].size(); j++) {
+	//		arr_in_edges[i][j] = in_edges[i][j];
 
-		}
-	}
+	//	}
+	//}
 
 
 	//int arr_out_degree[V];
