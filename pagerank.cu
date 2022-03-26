@@ -131,6 +131,7 @@ int main(int argc, char** argv) {
 
 			for (int j = edge_starts[i]; j < edge_starts[i + 1]; ++j) {
 				int v = flat_edges[j];
+				cudaDeviceSynchronize();
 				sum += arr_pr[v + current * V] / arr_out_degree[v];
 				cudaDeviceSynchronize();
 			}
