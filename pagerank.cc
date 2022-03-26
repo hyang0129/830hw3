@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 		pr[current][i] = 1.0 / V;
 	}
 
-	double arr_pr[2][V];
+	std::array < std::array<double, V>, 2>; 
 
 	for (int i = 0; i < V; ++i) {
 		arr_pr[current][i] = 1.0 / V;
