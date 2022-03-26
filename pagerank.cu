@@ -14,7 +14,7 @@ std::vector<int> out_degree;
 
 
 static const int blockSize = 1024;
-static const int blocks = 4096;
+static const int blocks = 1024;
 
 __global__ void allVertex(
 	const int V,
@@ -227,6 +227,18 @@ int main(int argc, char** argv) {
 		//	cudaDeviceSynchronize();
 		//	
 		//}
+
+		int same = 1;
+		for (int i = 0; i < V; ++i) {
+			if (arr_pr[v + current * V] != arr_pr[v + next * V]) {
+				same = 0;
+			}
+		}
+
+		if (same == 1) {
+			break;
+		}
+
 		current = next;
 	}
 
