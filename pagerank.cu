@@ -98,6 +98,9 @@ int main(int argc, char** argv) {
 
 	edge_starts[V + 1] = E; 
 
+	cout << E;
+	cout << endl;
+
 	//for (int i = 0; i < V; ++i) {
 	//	cout << edge_starts[i];
 	//	cout << endl;
