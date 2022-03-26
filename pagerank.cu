@@ -149,7 +149,8 @@ int main(int argc, char** argv) {
 			end = edge_starts[i+1];
 
 			cout << start;
-			cout << end;
+			cout << endl;
+
 
 			for (int j = start; j < end; ++j) {
 				int v = flat_edges[j];
