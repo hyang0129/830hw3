@@ -187,7 +187,20 @@ int main(int argc, char** argv) {
 	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
 
-		for (int i = 0; i < V; ++i) {
+		allVertex << <blocks, blockSize >> >(
+		V,
+		d,
+		next,
+		current,
+		flat_edges,
+		edge_starts,
+		arr_out_degree,
+		arr_pr
+		);
+
+		cudaDeviceSynchronize();
+
+		//for (int i = 0; i < V; ++i) {
 			//double sum = 0;
 
 			//for (int j = edge_starts[i]; j < edge_starts[i + 1]; ++j) {
@@ -199,21 +212,21 @@ int main(int argc, char** argv) {
 
 			//arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
 			
-			oneVertex << <1, blockSize >> > (
-				i,
-				V,
-				d,
-				next,
-				current,
-				flat_edges,
-				edge_starts,
-				arr_out_degree,
-				arr_pr
-				);
+		//	oneVertex << <1, blockSize >> > (
+		//		i,
+		//		V,
+		//		d,
+		//		next,
+		//		current,
+		//		flat_edges,
+		//		edge_starts,
+		//		arr_out_degree,
+		//		arr_pr
+		//		);
 
-			cudaDeviceSynchronize();
-			
-		}
+		//	cudaDeviceSynchronize();
+		//	
+		//}
 		current = next;
 	}
 
