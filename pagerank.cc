@@ -114,7 +114,7 @@ int main(int argc,char** argv){
 	}
 
 	for(int i = 0;i < V;++i){
-		fprintf(fout,"%.8f\n", arr_pr[current][i]);
+		fprintf(fout,"%.8f\n", r[current][i]);
 	}
 	fclose(fin);
 	fclose(fout);
