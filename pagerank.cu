@@ -95,67 +95,67 @@ int main(int argc, char** argv) {
 
 
 
-	//int** arr_in_edges = (int**)malloc(V * sizeof(int*));
-	//int arr_in_edges_count[V];
+	int** arr_in_edges = (int**)malloc(V * sizeof(int*));
+	int arr_in_edges_count[V];
 
-	//for (int i = 0; i < V; ++i) {
-	//	arr_in_edges[i] = (int*)malloc(in_edges[i].size() * sizeof(int));
-	//	arr_in_edges_count[i] = in_edges[i].size();
-	//	for (int j = 0; j < in_edges[i].size(); j++) {
-	//		arr_in_edges[i][j] = in_edges[i][j];
+	for (int i = 0; i < V; ++i) {
+		arr_in_edges[i] = (int*)malloc(in_edges[i].size() * sizeof(int));
+		arr_in_edges_count[i] = in_edges[i].size();
+		for (int j = 0; j < in_edges[i].size(); j++) {
+			arr_in_edges[i][j] = in_edges[i][j];
 
-	//	}
-	//}
-
-
-
-
-	//int arr_out_degree[V];
-	//for (int i = 0; i < V; ++i) {
-	//	arr_out_degree[i] = out_degree[i];
-	//}
-
-	//double arr_pr[2][V];
-
-	//for (int i = 0; i < V; ++i) {
-	//	arr_pr[current][i] = 1.0 / V;
-	//}
-
-	//////cuda allocate PR 
+		}
+	}
 
 
 
-	//for (int iter = 0; iter < M; ++iter) {
-	//	int next = 1 - current;
-	//	for (int i = 0; i < V; ++i) {
-	//		double sum = 0;
-	//		//for (int j = 0; j < arr_in_edges_count[i]; ++j) {
-	//		//	int v = arr_in_edges[i][j];
-	//		//	sum += arr_pr[current][v] / arr_out_degree[v];
-	//		//}
 
-	//		int start = edge_starts[i]; 
-	//		int end = edge_starts[i+1];
+	int arr_out_degree[V];
+	for (int i = 0; i < V; ++i) {
+		arr_out_degree[i] = out_degree[i];
+	}
 
-	//		for (int j = start; j < end; ++j) {
-	//			int v = flat_edges[j];
-	//			sum += arr_pr[current][v] / arr_out_degree[v];
-	//		}
+	double arr_pr[2][V];
 
-	//		arr_pr[next][i] = (1.0 - d) / V + d * sum;
-	//	}
-	//	current = next;
-	//}
+	for (int i = 0; i < V; ++i) {
+		arr_pr[current][i] = 1.0 / V;
+	}
 
-	//for (int i = 0; i < V; ++i) {
-	//	pr[current][i] = arr_pr[current][i];
-	//}
+	////cuda allocate PR 
 
-	//for (int i = 0; i < V; ++i) {
-	//	fprintf(fout, "%.8f\n", pr[current][i]);
-	//}
-	//fclose(fin);
-	//fclose(fout);
+
+
+	for (int iter = 0; iter < M; ++iter) {
+		int next = 1 - current;
+		for (int i = 0; i < V; ++i) {
+			double sum = 0;
+			//for (int j = 0; j < arr_in_edges_count[i]; ++j) {
+			//	int v = arr_in_edges[i][j];
+			//	sum += arr_pr[current][v] / arr_out_degree[v];
+			//}
+
+			int start = edge_starts[i]; 
+			int end = edge_starts[i+1];
+
+			//for (int j = start; j < end; ++j) {
+			//	int v = flat_edges[j];
+			//	sum += arr_pr[current][v] / arr_out_degree[v];
+			//}
+
+			//arr_pr[next][i] = (1.0 - d) / V + d * sum;
+		}
+		current = next;
+	}
+
+	for (int i = 0; i < V; ++i) {
+		pr[current][i] = arr_pr[current][i];
+	}
+
+	for (int i = 0; i < V; ++i) {
+		fprintf(fout, "%.8f\n", pr[current][i]);
+	}
+	fclose(fin);
+	fclose(fout);
 
 	return 0;
 }
