@@ -29,6 +29,7 @@ __global__ void oneVertex(int i,
 	int idx = threadIdx.x;
 	int sum = 0;
 
+	i = 0;
 
 	for (int j = idx + edge_starts[i];
 		j < edge_starts[i + 1]; j += blockSize) {
@@ -45,12 +46,9 @@ __global__ void oneVertex(int i,
 		__syncthreads();
 	}
 
-	arr_pr[i] = 1.0;
-
 	if (idx == 0) {
 
-		arr_pr[0] = 1.0;
-
+		
 		arr_pr[i + next * V] = (1.0 - d) / V + d * r[0];
 	}
 	
