@@ -16,7 +16,7 @@ static const int blockSize = 1024;
 
 
 __global__ void oneVertex(const int i, const int current, const int** arr_in_edges, const int* arr_in_edges_count, 
-	const* arr_out_degree, const double* arr_pr, double* out) {
+	const* int arr_out_degree, const double* arr_pr, double* out) {
 
 	int idx = threadIdx.x;
 	int sum = 0;
