@@ -19,6 +19,7 @@ static const int blockSize = 1024;
 __global__ void oneVertex(const int i, 
 	const int V, 
 	const double d,
+	const int next,
 	const int current, const int* flat_edges,
 	const int* edge_starts,
 	const int* arr_out_degree, const double** arr_pr) {
