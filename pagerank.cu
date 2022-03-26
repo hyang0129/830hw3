@@ -16,20 +16,24 @@ std::vector<int> out_degree;
 static const int blockSize = 1024;
 
 
-__global__ void oneVertex(const int i, const int current, const int** arr_in_edges, 
-	const int* arr_in_edges_count, 
-	const int* arr_out_degree, const double** arr_pr, double* out) {
+__global__ void oneVertex(const int i, 
+	const int V, 
+	const double d,
+	const int current, const int* flat_edges,
+	const int* edge_starts,
+	const int* arr_out_degree, const double** arr_pr) {
 
 	int idx = threadIdx.x;
 	int sum = 0;
 
 
-	for (int j = idx; j < arr_in_edges_count[i]; j += blockSize) {
-		int v = arr_in_edges[i][j];
-		sum += arr_pr[current][v] / arr_out_degree[v];
+	for (int j = idx + edge_starts[i];
+		j < edge_starts[i + 1]; j += blockSize) {
+		int v = flat_edges[j];
+		sum += arr_pr[v + current * V] / arr_out_degree[v];
 
 	}
-		
+
 	__shared__ int r[blockSize];
 	r[idx] = sum;
 	__syncthreads();
@@ -38,11 +42,12 @@ __global__ void oneVertex(const int i, const int current, const int** arr_in_edg
 			r[idx] += r[idx + size];
 		__syncthreads();
 	}
-	if (idx == 0)
-		*out = r[0];
 
-
-}
+	if (idx == 0) {
+		arr_pr[i + next * V] = (1.0 - d) / V + d * r[0];
+	}
+	
+	}
 
 
 int main(int argc, char** argv) {
