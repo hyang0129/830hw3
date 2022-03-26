@@ -61,8 +61,6 @@ int main(int argc, char** argv) {
 	}
 	flat_edge_locations[V + 1] = num_edges;
 
-	int arr_in_edges[V][longest_in_edges];
-
 	for (int i = 0; i < V; ++i) {
 		for (int j = 0; j < longest_in_edges; j++) {
 			if (j < in_edges[i].size()) {
@@ -104,16 +102,18 @@ int main(int argc, char** argv) {
 
 			for (int j = flat_edge_start; j < flat_edge_end; ++j) {
 				int v = flat_edges[j];
-				sum += pr[current][v] / out_degree[v];
+				sum += arr_pr[current][v] / arr_out_degree[v];
 			}
 
 
-			pr[next][i] = (1.0 - d) / V + d * sum;
+			arr_pr[next][i] = (1.0 - d) / V + d * sum;
 		}
 		current = next;
 	}
 
-
+	for (int i = 0; i < V; ++i) {
+		pr[current][i] = arr_pr[current][i];
+	}
 
 	for (int i = 0; i < V; ++i) {
 		fprintf(fout, "%.8f\n", pr[current][i]);
