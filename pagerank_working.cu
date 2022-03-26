@@ -14,9 +14,9 @@ std::vector<int> out_degree;
 
 
 static const int blockSize = 1024;
-static const int blocks = 32;
 
-__global__ void allVertex(
+
+__global__ void oneVertex(int i,
 	const int V,
 	const double d,
 	const int next,
@@ -24,58 +24,6 @@ __global__ void allVertex(
 	const int* flat_edges,
 	const int* edge_starts,
 	const int* arr_out_degree,
-	double* arr_pr
-) {
-
-	int idx = threadIdx.x;
-	
-
-	for (int vertexblock = blockIdx.x;
-		vertexblock < V;
-		vertexblock += blocks
-		) {
-
-		// for each vertexblock
-
-		double sum = 0;
-		int v = 0; 
-
-		for (int j = idx + edge_starts[vertexblock];
-			j < edge_starts[vertexblock + 1]; j += blockSize) {
-			v = flat_edges[j];
-
-			sum += arr_pr[v + current * V] / arr_out_degree[v];
-
-		}
-
-		__shared__ double r[blockSize];
-		r[idx] = sum;
-		__syncthreads();
-		for (int size = blockSize / 2; size > 0; size /= 2) { //uniform
-			if (idx < size)
-				r[idx] += r[idx + size];
-			__syncthreads();
-		}
-
-		if (idx == 0) {
-			arr_pr[i + next * V] = (1.0 - d) / V + d * r[0];
-		}
-
-	}
-
-
-
-}
-
-
-__global__ void oneVertex(int i, 
-	const int V, 
-	const double d,
-	const int next,
-	const int current, 
-	const int* flat_edges,
-	const int* edge_starts,
-	const int* arr_out_degree, 
 	double* arr_pr) {
 
 	int idx = threadIdx.x;
@@ -101,12 +49,12 @@ __global__ void oneVertex(int i,
 
 
 	if (idx == 0) {
-	
+
 		arr_pr[i + next * V] = (1.0 - d) / V + d * r[0];
 	}
-	
 
-	}
+
+}
 
 
 int main(int argc, char** argv) {
@@ -145,11 +93,11 @@ int main(int argc, char** argv) {
 	int* flat_edges = (int*)malloc(E * sizeof(int));
 	int* edge_starts = new int[V + 1];
 	int* arr_out_degree = new int[V];
-	double* arr_pr  = new double[V*2];
+	double* arr_pr = new double[V * 2];
 	//double arr_pr[V * 2];
 
 
-	
+
 	////cuda allocate PR 
 	cudaMallocManaged(&flat_edges, E * sizeof(int));
 	cudaMallocManaged(&edge_starts, (V + 1) * sizeof(int));
@@ -198,7 +146,7 @@ int main(int argc, char** argv) {
 			//}
 
 			//arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
-			
+
 			oneVertex << <1, blockSize >> > (
 				i,
 				V,
@@ -212,7 +160,7 @@ int main(int argc, char** argv) {
 				);
 
 			cudaDeviceSynchronize();
-			
+
 		}
 		current = next;
 	}
