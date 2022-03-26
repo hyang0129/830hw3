@@ -102,8 +102,6 @@ int main(int argc, char** argv) {
 
 	////cuda allocate PR 
 
-	cuda
-
 
 	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
