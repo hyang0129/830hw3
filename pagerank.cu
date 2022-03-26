@@ -35,12 +35,12 @@ __global__ void oneVertex(int i,
 		v = flat_edges[j];
 
 		//sum += arr_pr[v + current * V] / arr_out_degree[v];
-		sum += arr_pr[v + current * V] * 10;
+		sum += arr_pr[v + current * V];
 
 
 	}
 
-	__shared__ int r[blockSize];
+	__shared__ double r[blockSize];
 	r[idx] = sum;
 	__syncthreads();
 	for (int size = blockSize / 2; size > 0; size /= 2) { //uniform
