@@ -85,7 +85,7 @@ int main(int argc, char** argv) {
 	//create array equivalents 
 
 	int* flat_edges = (int*)malloc(E * sizeof(int));
-	int edge_starts[V + 1];
+	int* edge_starts = new int[V + 1];
 
 	int pos = 0; 
 
@@ -104,25 +104,12 @@ int main(int argc, char** argv) {
 
 	edge_starts[V] = E; 
 
-
-	//int** arr_in_edges = (int**)malloc(V * sizeof(int*));
-	//int arr_in_edges_count[V];
-
-	//for (int i = 0; i < V; ++i) {
-	//	arr_in_edges[i] = (int*)malloc(in_edges[i].size() * sizeof(int));
-	//	arr_in_edges_count[i] = in_edges[i].size();
-	//	for (int j = 0; j < in_edges[i].size(); j++) {
-	//		arr_in_edges[i][j] = in_edges[i][j];
-
-	//	}
-	//}
-
 	int* arr_out_degree = new int[V];
 	for (int i = 0; i < V; ++i) {
 		arr_out_degree[i] = out_degree[i];
 	}
 
-	double arr_pr[V*2];
+	double* arr_pr  = new double[V*2];
 
 	for (int i = 0; i < V; ++i) {
 		arr_pr[i+current*V] = 1.0 / V;
