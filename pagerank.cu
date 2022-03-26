@@ -16,7 +16,7 @@ std::vector<int> out_degree;
 static const int blockSize = 1024;
 
 
-__global__ void oneVertex(int *i, 
+__global__ void oneVertex(int i, 
 	const int V, 
 	const double d,
 	const int next,
@@ -143,8 +143,6 @@ int main(int argc, char** argv) {
 
 			//arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
 			
-
-			cudaMallocManaged(&i, 1 * sizeof(int));
 
 			oneVertex << <1, blockSize >> > (
 				i,
