@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
 		int next = 1 - current;
 		for (int i = 0; i < V; ++i) {
 			double sum = 0;
-			for (int j = 0; j < arr_in_edges[i].size(); ++j) {
+			for (int j = 0; j < sizeof(arr_in_edges[i]); ++j) {
 				int v = arr_in_edges[i][j];
 				sum += arr_pr[current][v] / arr_out_degree[v];
 			}
