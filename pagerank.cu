@@ -142,9 +142,9 @@ int main(int argc, char** argv) {
 			//}
 
 			//arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
-			int ii = new int; 
-			ii = i;
-			cudaMallocManaged(&ii, 1 * sizeof(int));
+			
+
+			cudaMallocManaged(&i, 1 * sizeof(int));
 
 			oneVertex << <1, blockSize >> > (
 				ii,
