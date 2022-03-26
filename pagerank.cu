@@ -109,8 +109,8 @@ int main(int argc, char** argv) {
 		arr_out_degree[i] = out_degree[i];
 	}
 
-	//double* arr_pr  = new double[V*2];
-	double arr_pr[V * 2];
+	double* arr_pr  = new double[V*2];
+	//double arr_pr[V * 2];
 	for (int i = 0; i < V; ++i) {
 		arr_pr[i+current*V] = 1.0 / V;
 	}
