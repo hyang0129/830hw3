@@ -163,8 +163,8 @@ int main(int argc, char** argv) {
 	int block_pos = 0;
 	int total_edge_sections = 0; 
 
-	int* edge_sections = (int*)malloc(E * sizeof(int));
-	int* edge_section_to_vertex = (int*)malloc(E * sizeof(int));
+	int* edge_sections = (int*)malloc(500000 * sizeof(int));
+	int* edge_section_to_vertex = (int*)malloc(500000 * sizeof(int));
 
 	for (int i = 0; i < V; ++i) {
 
