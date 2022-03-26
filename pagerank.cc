@@ -73,8 +73,6 @@ int main(int argc, char** argv) {
 	}
 
 
-
-
 	int arr_out_degree[V];
 	for (int i = 0; i < V; ++i) {
 		arr_out_degree[i] = out_degree[i];
@@ -89,27 +87,19 @@ int main(int argc, char** argv) {
 	////cuda allocate PR 
 
 
-	for (int iter = 0; iter < M; ++iter) {
-		int next = 1 - current;
-		for (int i = 0; i < V; ++i) {
-			double sum = 0;
-			for (int j = 0; j < in_edges[i].size(); ++j) {
-				int v = arr_in_edges[i][j];
-				sum += arr_pr[current][v] / arr_out_degree[v];
-			}
+	//for (int iter = 0; iter < M; ++iter) {
+	//	int next = 1 - current;
+	//	for (int i = 0; i < V; ++i) {
+	//		double sum = 0;
+	//		for (int j = 0; j < in_edges[i].size(); ++j) {
+	//			int v = arr_in_edges[i][j];
+	//			sum += arr_pr[current][v] / arr_out_degree[v];
+	//		}
 
-			//int flat_edge_start = flat_edge_locations[i];
-			//int flat_edge_end = flat_edge_locations[i + 1];
-
-			//for (int j = flat_edge_start; j < flat_edge_end; ++j) {
-			//	int v = flat_edges[j];
-			//	sum += arr_pr[current][v] / arr_out_degree[v];
-			//}
-
-			arr_pr[next][i] = (1.0 - d) / V + d * sum;
-		}
-		current = next;
-	}
+	//		arr_pr[next][i] = (1.0 - d) / V + d * sum;
+	//	}
+	//	current = next;
+	//}
 
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[current][i];
