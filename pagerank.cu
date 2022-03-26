@@ -159,19 +159,22 @@ int main(int argc, char** argv) {
 
 	cudaDeviceSynchronize();
 
+	for (int i = 0; i < V * 2; ++i) {
+		cout << arr_pr[i];
+	}
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
-		cout << arr_pr[i + current * V];
+		
 	}
 
 	for (int i = 0; i < V; ++i) {
 		fprintf(fout, "%.8f\n", pr[current][i]);
 	}
 
-	//cudaFree(flat_edges);
-	//cudaFree(edge_starts);
-	//cudaFree(arr_out_degree);
-	//cudaFree(arr_pr);
+	cudaFree(flat_edges);
+	cudaFree(edge_starts);
+	cudaFree(arr_out_degree);
+	cudaFree(arr_pr);
 
 	fclose(fin);
 	fclose(fout);
