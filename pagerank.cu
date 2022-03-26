@@ -16,7 +16,7 @@ std::vector<int> out_degree;
 static const int blockSize = 1024;
 
 
-__global__ void oneVertex(int i, 
+__global__ void oneVertex(int *i, 
 	const int V, 
 	const double d,
 	const int next,
