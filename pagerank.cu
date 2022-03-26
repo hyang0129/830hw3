@@ -89,6 +89,9 @@ int main(int argc, char** argv) {
 		for (int j = 0; j < in_edges[i].size(); j++) {
 			flat_edges[pos] = in_edges[i][j];
 			++pos;
+
+			cout << pos;
+
 		}
 	}
 
@@ -138,10 +141,10 @@ int main(int argc, char** argv) {
 			int start = edge_starts[i]; 
 			int end = edge_starts[i+1];
 
-			//for (int j = start; j < end; ++j) {
-			//	int v = flat_edges[j];
-			//	sum += arr_pr[current][v] / arr_out_degree[v];
-			//}
+			for (int j = start; j < end; ++j) {
+				int v = flat_edges[j];
+				sum += arr_pr[current][v] / arr_out_degree[v];
+			}
 
 			arr_pr[next][i] = (1.0 - d) / V + d * sum;
 		}
