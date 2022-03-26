@@ -20,9 +20,11 @@ __global__ void oneVertex(const int i,
 	const int V, 
 	const double d,
 	const int next,
-	const int current, const int* flat_edges,
+	const int current, 
+	const int* flat_edges,
 	const int* edge_starts,
-	const int* arr_out_degree, double* arr_pr) {
+	const int* arr_out_degree, 
+	double* arr_pr) {
 
 	int idx = threadIdx.x;
 	int sum = 0;
@@ -127,21 +129,35 @@ int main(int argc, char** argv) {
 		int next = 1 - current;
 
 		for (int i = 0; i < V; ++i) {
-			double sum = 0;
+			//double sum = 0;
 
-			for (int j = edge_starts[i]; j < edge_starts[i + 1]; ++j) {
-				int v = flat_edges[j];
-				
-				sum += arr_pr[v + current * V] / arr_out_degree[v];
-				
-			}
+			//for (int j = edge_starts[i]; j < edge_starts[i + 1]; ++j) {
+			//	int v = flat_edges[j];
+			//	
+			//	sum += arr_pr[v + current * V] / arr_out_degree[v];
+			//	
+			//}
 
-			arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
+			//arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
+						
 			
+			cuda_squared_l2_dist << <1, blockSize >> > (
+				i,
+				V,
+				d,
+				next,
+				current,
+				flat_edges,
+				edge_starts,
+				arr_out_degree,
+				arr_pr
+				);
 			
 		}
 		current = next;
 	}
+
+	cudaDeviceSynchronize();
 
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
