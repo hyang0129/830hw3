@@ -16,7 +16,8 @@ std::vector<int> out_degree;
 static const int blockSize = 1024;
 
 
-__global__ void oneVertex(const int i, const int current, const int** arr_in_edges, const int* arr_in_edges_count, 
+__global__ void oneVertex(const int i, const int current, const int** arr_in_edges, 
+	const int* arr_in_edges_count, 
 	const int* arr_out_degree, const double** arr_pr, double* out) {
 
 	int idx = threadIdx.x;
@@ -98,14 +99,6 @@ int main(int argc, char** argv) {
 
 	edge_starts[V] = E; 
 
-	cout << E;
-	cout << endl;
-
-	for (int i = 0; i < V + 1; ++i) {
-		cout << edge_starts[i];
-		cout << endl;
-	}
-
 
 	int** arr_in_edges = (int**)malloc(V * sizeof(int*));
 	int arr_in_edges_count[V];
@@ -119,19 +112,18 @@ int main(int argc, char** argv) {
 		}
 	}
 
-
-
-
 	int arr_out_degree[V];
 	for (int i = 0; i < V; ++i) {
 		arr_out_degree[i] = out_degree[i];
 	}
 
-	double arr_pr[2][V];
+	double arr_pr[V*2];
 
 	for (int i = 0; i < V; ++i) {
-		arr_pr[current][i] = 1.0 / V;
+		arr_pr[i+current*V] = 1.0 / V;
 	}
+
+
 
 	////cuda allocate PR 
 
@@ -143,25 +135,16 @@ int main(int argc, char** argv) {
 		int next = 1 - current;
 		for (int i = 0; i < V; ++i) {
 			double sum = 0;
-			//for (int j = 0; j < arr_in_edges_count[i]; ++j) {
-			//	int v = arr_in_edges[i][j];
-			//	sum += arr_pr[current][v] / arr_out_degree[v];
-			//}
 
 			start = edge_starts[i]; 
 			end = edge_starts[i+1];
 
-			//cout << start;
-			//cout << endl;
-			//cout << end;
-			//cout << endl;
-
 			for (int j = start; j < end; ++j) {
 				int v = flat_edges[j];
-				sum += arr_pr[current][v] / arr_out_degree[v];
+				sum += arr_pr[i + current * V] / arr_out_degree[v];
 			}
 
-			arr_pr[next][i] = (1.0 - d) / V + d * sum;
+			arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
 		}
 		current = next;
 	}
