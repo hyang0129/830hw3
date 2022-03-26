@@ -85,7 +85,8 @@ int main(int argc, char** argv) {
 	//create array equivalents 
 
 	int* flat_edges = (int*)malloc(E * sizeof(int));
-	int* edge_starts = new int[V + 1];
+	int edge_starts[V + 1];
+	//int* edge_starts = new int[V + 1];
 
 	int pos = 0; 
 
@@ -104,13 +105,14 @@ int main(int argc, char** argv) {
 
 	edge_starts[V] = E; 
 
-	int* arr_out_degree = new int[V];
+	//int* arr_out_degree = new int[V];
+	int arr_out_degree[V];
 	for (int i = 0; i < V; ++i) {
 		arr_out_degree[i] = out_degree[i];
 	}
 
-	double* arr_pr  = new double[V*2];
-
+	//double* arr_pr  = new double[V*2];
+	double arr_pr[V * 2];
 	for (int i = 0; i < V; ++i) {
 		arr_pr[i+current*V] = 1.0 / V;
 	}
@@ -120,11 +122,11 @@ int main(int argc, char** argv) {
 	
 	
 
-	cudaMallocManaged(&flat_edges, E * sizeof(int));
-	int v1 = V + 1;
-	cudaMallocManaged(&edge_starts,  v1 * sizeof(int));
-	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
-	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
+	//cudaMallocManaged(&flat_edges, E * sizeof(int));
+	//int v1 = V + 1;
+	//cudaMallocManaged(&edge_starts,  v1 * sizeof(int));
+	//cudaMallocManaged(&arr_out_degree, V * sizeof(int));
+	//cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
 
 
 	for (int iter = 0; iter < M; ++iter) {
@@ -151,10 +153,10 @@ int main(int argc, char** argv) {
 		fprintf(fout, "%.8f\n", pr[current][i]);
 	}
 
-	cudaFree(flat_edges);
-	cudaFree(edge_starts);
-	cudaFree(arr_out_degree);
-	cudaFree(arr_pr);
+	//cudaFree(flat_edges);
+	//cudaFree(edge_starts);
+	//cudaFree(arr_out_degree);
+	//cudaFree(arr_pr);
 
 	fclose(fin);
 	fclose(fout);
