@@ -118,8 +118,7 @@ int main(int argc, char** argv) {
 	
 	////cuda allocate PR 
 	cudaMallocManaged(&flat_edges, E * sizeof(int));
-	int v1 = V + 1;
-	cudaMallocManaged(&edge_starts,  v1 * sizeof(int));
+	cudaMallocManaged(&edge_starts, *V + 1) * sizeof(int));
 	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
 	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
 
@@ -133,6 +132,7 @@ int main(int argc, char** argv) {
 			for (int j = edge_starts[i]; j < edge_starts[i + 1]; ++j) {
 				int v = flat_edges[j];
 				sum += arr_pr[v + current * V] / arr_out_degree[v];
+				cudaDeviceSynchronize();
 			}
 
 			arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
