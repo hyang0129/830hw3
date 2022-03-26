@@ -44,22 +44,16 @@ int main(int argc, char** argv) {
 	}
 
 	//create array equivalents 
-
-	int flat_edges[num_edges];
-	int flat_edge_locations[V + 1];
-
-	int current_edge = 0;
+	int** arr_in_edges = (int**)malloc(V * sizeof(int*));
 
 	for (int i = 0; i < V; ++i) {
-		flat_edge_locations[i] = current_edge;
+		arr_in_edges[i] = (int*)malloc(in_edges[i].size() * sizeof(int));
 
 		for (int j = 0; j < in_edges[i].size(); j++) {
+			arr_in_edges[i][j] = in_edges[i][j];
 
-			flat_edges[current_edge] = in_edges[i][j];
-			++current_edge;
 		}
 	}
-	flat_edge_locations[V + 1] = num_edges;
 
 
 	int arr_out_degree[V];
@@ -73,7 +67,6 @@ int main(int argc, char** argv) {
 		arr_pr[current][i] = 1.0 / V;
 	}
 
-
 	////cuda allocate PR 
 
 
@@ -81,25 +74,23 @@ int main(int argc, char** argv) {
 		int next = 1 - current;
 		for (int i = 0; i < V; ++i) {
 			double sum = 0;
-			//for (int j = 0; j < in_edges[i].size(); ++j) {
-			//	int v = in_edges[i][j];
-			//	sum += pr[current][v] / out_degree[v];
-			//}
-
-			int flat_edge_start = flat_edge_locations[i];
-			int flat_edge_end = flat_edge_locations[i + 1];
-
-			for (int j = flat_edge_start; j < flat_edge_end; ++j) {
-				int v = flat_edges[j];
-				sum += arr_pr[current][v] / out_degree[v];
+			for (int j = 0; j < arr_in_edges[i].size(); ++j) {
+				int v = arr_in_edges[i][j];
+				sum += arr_pr[current][v] / arr_out_degree[v];
 			}
 
+			//int flat_edge_start = flat_edge_locations[i];
+			//int flat_edge_end = flat_edge_locations[i + 1];
+
+			//for (int j = flat_edge_start; j < flat_edge_end; ++j) {
+			//	int v = flat_edges[j];
+			//	sum += arr_pr[current][v] / arr_out_degree[v];
+			//}
 
 			arr_pr[next][i] = (1.0 - d) / V + d * sum;
 		}
 		current = next;
 	}
-
 
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[current][i];
