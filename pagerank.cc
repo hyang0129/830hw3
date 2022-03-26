@@ -48,6 +48,19 @@ int main(int argc,char** argv){
 	int flat_edges[num_edges]; 
 	int flat_edge_locations[V + 1]; 
 
+	int current_edge = 0; 
+
+	for (int i = 0; i < V; ++i) {
+		flat_edge_locations[i] = current_edge;
+
+		for (int j = 0; j < in_edges[i].size(); j++) {
+
+			flat_edges[current_edge] = in_edges[i][j];
+			++current_edge;
+		}
+	}
+	flat_edge_locations[V + 1] = num_edges; 
+
 	//int arr_in_edges[V][longest_in_edges];
 	
 	//for (int i = 0; i < V; ++i) {
