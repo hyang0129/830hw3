@@ -175,11 +175,12 @@ int main(int argc, char** argv) {
 
 		//cout << endl;
 	}
+
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
 
-		cout << arr_pr[i + current * V];
-		cout << endl;
+		//cout << arr_pr[i + current * V];
+		//cout << endl;
 	}
 
 	for (int i = 0; i < V; ++i) {
