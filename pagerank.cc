@@ -44,7 +44,7 @@ int main(int argc,char** argv){
 
 	//create array equivalents 
 	
-	int arr_in_edges[V][longest_in_edges];
+	//int arr_in_edges[V][longest_in_edges];
 	
 	//for (int i = 0; i < V; ++i) {
 	//	for (int j = 0; j < longest_in_edges; j++) {
