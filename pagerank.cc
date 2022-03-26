@@ -51,7 +51,7 @@ int main(int argc, char** argv) {
 
 		int same = 1;
 		for (int i = 0; i < V; ++i) {
-			if (current[i] != next[i]) {
+			if (arr_pr[current][i] != arr_pr[next][i]) {
 				same = 0;
 			}
 		}
