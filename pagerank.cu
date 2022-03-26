@@ -130,16 +130,18 @@ int main(int argc, char** argv) {
 
 	
 	////cuda allocate PR 
-	//cudaMallocManaged()
+	
+	
 
-
-
-
-
+	cudaMallocManaged(&flat_edges, E * sizeof(int));
+	cudaMallocManaged(&edge_starts, (V+1) * sizeof(int));
+	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
+	cudaMallocManaged(&arr_pr, 2 * V * sizeof(int));
 
 
 	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
+
 		for (int i = 0; i < V; ++i) {
 			double sum = 0;
 
@@ -160,6 +162,12 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < V; ++i) {
 		fprintf(fout, "%.8f\n", pr[current][i]);
 	}
+
+	cudaFree(flat_edges);
+	cudaFree(edge_starts);
+	cudaFree(arr_out_degree);
+	cudaFree(arr_pr);
+
 	fclose(fin);
 	fclose(fout);
 
