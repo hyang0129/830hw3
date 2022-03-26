@@ -101,10 +101,10 @@ int main(int argc, char** argv) {
 	cout << E;
 	cout << endl;
 
-	//for (int i = 0; i < V; ++i) {
-	//	cout << edge_starts[i];
-	//	cout << endl;
-	//}
+	for (int i = 0; i < V + 1; ++i) {
+		cout << edge_starts[i];
+		cout << endl;
+	}
 
 
 	int** arr_in_edges = (int**)malloc(V * sizeof(int*));
@@ -151,10 +151,10 @@ int main(int argc, char** argv) {
 			start = edge_starts[i]; 
 			end = edge_starts[i+1];
 
-			cout << start;
-			cout << endl;
-			cout << end;
-			cout << endl;
+			//cout << start;
+			//cout << endl;
+			//cout << end;
+			//cout << endl;
 
 			for (int j = start; j < end; ++j) {
 				int v = flat_edges[j];
