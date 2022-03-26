@@ -46,10 +46,13 @@ __global__ void oneVertex(const int i,
 		__syncthreads();
 	}
 
+	arr_pr[0] = 0;
+
 	if (idx == 0) {
 		arr_pr[i + next * V] = (1.0 - d) / V + d * r[0];
 	}
 	
+
 	}
 
 
