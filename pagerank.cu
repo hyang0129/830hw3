@@ -11,6 +11,35 @@ int V, E, L, M;
 std::vector<std::vector<int>> in_edges;
 std::vector<int> out_degree;
 
+static const int blockSize = 1024;
+
+__global__ void oneVertex(const int i, const int current, const int** arr_in_edges, const int* arr_in_edges_count, 
+	const* arr_out_degree, const double* arr_pr, double* out) {
+
+	int idx = threadIdx.x;
+	int sum = 0;
+
+
+	for (int j = idx; j < arr_in_edges_count[i]; j += blockSize) {
+		int v = arr_in_edges[i][j];
+		sum += arr_pr[current][v] / arr_out_degree[v];
+
+	}
+		
+	__shared__ int r[blockSize];
+	r[idx] = sum;
+	__syncthreads();
+	for (int size = blockSize / 2; size > 0; size /= 2) { //uniform
+		if (idx < size)
+			r[idx] += r[idx + size];
+		__syncthreads();
+	}
+	if (idx == 0)
+		*out = r[0];
+
+
+}
+
 
 int main(int argc, char** argv) {
 	FILE* fin = fopen(argv[1], "r");
@@ -70,6 +99,8 @@ int main(int argc, char** argv) {
 	}
 
 	////cuda allocate PR 
+
+	cuda
 
 
 	for (int iter = 0; iter < M; ++iter) {
