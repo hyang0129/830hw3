@@ -35,7 +35,7 @@ __global__ void oneVertex(int i,
 		v = flat_edges[j];
 
 		//sum += arr_pr[v + current * V] / arr_out_degree[v];
-		sum += arr_pr[v + current * V] * 10 / arr_out_degree[v] ;
+		sum += arr_pr[v + current * V] / arr_out_degree[v] ;
 
 
 	}
@@ -51,7 +51,6 @@ __global__ void oneVertex(int i,
 
 
 	if (idx == 0) {
-		
 
 		arr_pr[i + next * V] = (1.0 - d) / V + d * r[0];
 	}
@@ -135,21 +134,22 @@ int main(int argc, char** argv) {
 	}
 
 
-	for (int iter = 0; iter < M; ++iter) {
+	for (int iter = 0; iter < 1; ++iter) {
 		int next = 1 - current;
 
 		for (int i = 0; i < V; ++i) {
-			//double sum = 0;
+			double sum = 0;
 
-			//for (int j = edge_starts[i]; j < edge_starts[i + 1]; ++j) {
-			//	int v = flat_edges[j];
-			//	
-			//	sum += arr_pr[v + current * V] / arr_out_degree[v];
-			//	
-			//}
+			for (int j = edge_starts[i]; j < edge_starts[i + 1]; ++j) {
+				int v = flat_edges[j];
+				
+				sum += arr_pr[v + current * V] / arr_out_degree[v];
+				
+			}
 
-			//arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
+			arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
 			
+	/*		cudaDeviceSynchronize();
 
 			oneVertex << <1, blockSize >> > (
 				i,
@@ -163,7 +163,7 @@ int main(int argc, char** argv) {
 				arr_pr
 				);
 
-			cudaDeviceSynchronize();
+			cudaDeviceSynchronize();*/
 			
 		}
 		current = next;
@@ -181,8 +181,6 @@ int main(int argc, char** argv) {
 		pr[current][i] = arr_pr[i + current * V];
 
 		cout << arr_pr[i + current * V];
-		cout << " ";
-		cout << edge_starts[i + 1] - edge_starts[i];
 		cout << endl;
 	}
 
