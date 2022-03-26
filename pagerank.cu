@@ -77,9 +77,9 @@ int main(int argc, char** argv) {
 
 
 	//cuda allocate PR 
-	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
-	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
-	cudaMallocManaged(&arr_in_edges, V * longest_in_edges * sizeof(int));
+	//cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
+	//cudaMallocManaged(&arr_out_degree, V * sizeof(int));
+	//cudaMallocManaged(&arr_in_edges, V * longest_in_edges * sizeof(int));
 
 
 	for (int iter = 0; iter < M; ++iter) {
