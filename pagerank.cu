@@ -58,7 +58,7 @@ __global__ void allVertex(
 		}
 
 		if (idx == 0) {
-			arr_pr[i + next * V] = (1.0 - d) / V + d * r[0];
+			arr_pr[vertexblock + next * V] = (1.0 - d) / V + d * r[0];
 		}
 
 	}
