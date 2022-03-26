@@ -172,14 +172,16 @@ int main(int argc, char** argv) {
 	cudaDeviceSynchronize();
 
 	for (int i = 0; i < V * 2; ++i) {
-		cout << arr_pr[i];
+		//cout << arr_pr[i];
 		//cout << edge_starts[i];
 
-		cout << endl;
+		//cout << endl;
 	}
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
-		
+		cout << arr_pr[i + current * V];
+		cout << arr_out_degree[i];
+		cout << endl;
 	}
 
 	for (int i = 0; i < V; ++i) {
@@ -196,4 +198,5 @@ int main(int argc, char** argv) {
 
 	return 0;
 }
+
 
