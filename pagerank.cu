@@ -136,6 +136,8 @@ int main(int argc, char** argv) {
 			}
 
 			arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
+			
+			cudaDeviceSynchronize();
 		}
 		current = next;
 	}
