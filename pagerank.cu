@@ -202,7 +202,7 @@ int main(int argc, char** argv) {
 
 		int same = 1;
 		for (int i = 0; i < V; ++i) {
-			if (arr_pr[v + current * V] != arr_pr[v + next * V]) {
+			if (arr_pr[i + current * V] != arr_pr[i + next * V]) {
 				same = 0;
 			}
 		}
