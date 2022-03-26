@@ -47,6 +47,9 @@ __global__ void oneVertex(int i,
 	}
 
 	if (idx == 0) {
+
+		arr_pr[0] = 1.0;
+
 		arr_pr[i + next * V] = (1.0 - d) / V + d * r[0];
 	}
 	
