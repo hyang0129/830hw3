@@ -48,7 +48,7 @@ __global__ void oneVertex(int i,
 	if (idx == 0) {
 
 		arr_pr[0] = i;
-		arr_pr[1] = (1.0 - d) / V + d * r[0];
+		arr_pr[1] = r[0];
 
 		arr_pr[i + next * V] = 1.0;
 
@@ -158,6 +158,8 @@ int main(int argc, char** argv) {
 				arr_out_degree,
 				arr_pr
 				);
+
+			cudaDeviceSynchronize();
 			
 		}
 		current = next;
