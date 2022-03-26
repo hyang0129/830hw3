@@ -128,21 +128,22 @@ int main(int argc, char** argv) {
 		arr_pr[i+current*V] = 1.0 / V;
 	}
 
-
-
+	
 	////cuda allocate PR 
-	int start = 0;
-	int end = 0; 
+	//cudaMallocManaged()
+
+
+
+
+
+
 
 	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
 		for (int i = 0; i < V; ++i) {
 			double sum = 0;
 
-			start = edge_starts[i]; 
-			end = edge_starts[i+1];
-
-			for (int j = start; j < end; ++j) {
+			for (int j = edge_starts[i]; j < edge_starts[i + 1]; ++j) {
 				int v = flat_edges[j];
 				sum += arr_pr[v + current * V] / arr_out_degree[v];
 			}
