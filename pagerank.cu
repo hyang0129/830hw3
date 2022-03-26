@@ -34,7 +34,8 @@ __global__ void oneVertex(int i,
 		j < edge_starts[i + 1]; j += blockSize) {
 		int v = flat_edges[j];
 		sum += arr_pr[v + current * V] / arr_out_degree[v];
-		arr_pr[v] = 1.0;
+
+		arr_pr[flat_edges[0]] = 1.0;
 
 	}
 
