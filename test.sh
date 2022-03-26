@@ -1,3 +1,5 @@
+ulimit -v 2097152
+
 correct_cnt=0
 
 for i in {1..3}
