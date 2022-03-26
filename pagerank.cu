@@ -15,32 +15,32 @@ std::vector<int> out_degree;
 static const int blockSize = 1024;
 
 
-//__global__ void oneVertex(const int i, const int current, const int** arr_in_edges, const int* arr_in_edges_count, 
-//	const* arr_out_degree, const double* arr_pr, double* out) {
-//
-//	int idx = threadIdx.x;
-//	int sum = 0;
-//
-//
-//	for (int j = idx; j < arr_in_edges_count[i]; j += blockSize) {
-//		int v = arr_in_edges[i][j];
-//		sum += arr_pr[current][v] / arr_out_degree[v];
-//
-//	}
-//		
-//	__shared__ int r[blockSize];
-//	r[idx] = sum;
-//	__syncthreads();
-//	for (int size = blockSize / 2; size > 0; size /= 2) { //uniform
-//		if (idx < size)
-//			r[idx] += r[idx + size];
-//		__syncthreads();
-//	}
-//	if (idx == 0)
-//		*out = r[0];
-//
-//
-//}
+__global__ void oneVertex(const int i, const int current, const int** arr_in_edges, const int* arr_in_edges_count, 
+	const* arr_out_degree, const double* arr_pr, double* out) {
+
+	int idx = threadIdx.x;
+	int sum = 0;
+
+
+	for (int j = idx; j < arr_in_edges_count[i]; j += blockSize) {
+		int v = arr_in_edges[i][j];
+		sum += arr_pr[current][v] / arr_out_degree[v];
+
+	}
+		
+	__shared__ int r[blockSize];
+	r[idx] = sum;
+	__syncthreads();
+	for (int size = blockSize / 2; size > 0; size /= 2) { //uniform
+		if (idx < size)
+			r[idx] += r[idx + size];
+		__syncthreads();
+	}
+	if (idx == 0)
+		*out = r[0];
+
+
+}
 
 
 int main(int argc, char** argv) {
@@ -75,9 +75,26 @@ int main(int argc, char** argv) {
 	}
 
 	//create array equivalents 
+
+	int* flat_edges = (int*)malloc(E * sizeof(int));
+	int edge_starts[V+1]; 
+
+	int pos = 0; 
+
+	for (int i = 0; i < V; ++i) {
+		
+		edge_starts[i] = pos; 
+
+		for (int j = 0; j < in_edges[i].size(); j++) {
+			flat_edges[pos] = in_edges[i][j];
+			++pos;
+		}
+	}
+
+	edge_starts[V + 1] = E; 
+
 	int** arr_in_edges = (int**)malloc(V * sizeof(int*));
 	int arr_in_edges_count[V];
-
 
 	for (int i = 0; i < V; ++i) {
 		arr_in_edges[i] = (int*)malloc(in_edges[i].size() * sizeof(int));
@@ -87,6 +104,8 @@ int main(int argc, char** argv) {
 
 		}
 	}
+
+
 
 
 	int arr_out_degree[V];
@@ -101,6 +120,8 @@ int main(int argc, char** argv) {
 	}
 
 	////cuda allocate PR 
+
+	cudaMallocManaged
 
 
 	for (int iter = 0; iter < M; ++iter) {
