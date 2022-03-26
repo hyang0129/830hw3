@@ -28,13 +28,13 @@ __global__ void oneVertex(int i,
 
 	int idx = threadIdx.x;
 	int sum = 0;
-
+	int v = 0;
 
 	for (int j = idx + edge_starts[i];
 		j < edge_starts[i + 1]; j += blockSize) {
-		int v = flat_edges[j];
+		v = flat_edges[j];
 		//sum += arr_pr[v + current * V] / arr_out_degree[v];
-		sum += 1.0;
+		sum += v;
 
 	}
 
@@ -46,6 +46,7 @@ __global__ void oneVertex(int i,
 			r[idx] += r[idx + size];
 		__syncthreads();
 	}
+
 
 	if (idx == 0) {
 		
