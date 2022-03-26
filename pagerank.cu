@@ -4,7 +4,6 @@
 #include<queue>
 #include<vector>
 
-using namespace std;
 
 const double d = 0.85;
 int V, E, L, M;
@@ -21,7 +20,7 @@ int main(int argc, char** argv) {
 	out_degree = std::vector<int>(V, 0);
 
 	int longest_in_edges = 0;
-
+	int num_edges = 0;
 	for (int i = 0; i < E; ++i) {
 		int u, v;
 		fscanf(fin, "%d%d", &u, &v);
@@ -33,6 +32,7 @@ int main(int argc, char** argv) {
 			longest_in_edges = in_edges[v].size();
 		}
 
+		++num_edges;
 	}
 
 	std::vector<double> pr[2];
@@ -44,60 +44,42 @@ int main(int argc, char** argv) {
 	}
 
 	//create array equivalents 
+	int** arr_in_edges = (int**)malloc(V * sizeof(int*));
+	int arr_in_edges_count[V];
 
-	int** arr_in_edges;
-	arr_in_edges = new int* [V];
+
 	for (int i = 0; i < V; ++i) {
-		arr_in_edges[V] = new int[longest_in_edges];
-		for (int j = 0; j < longest_in_edges; j++) {
-			if (j < in_edges[i].size()) {
-				arr_in_edges[i][j] = in_edges[i][j];
-			}
-			else {
-				arr_in_edges[i][j] = -1;
-			}
+		arr_in_edges[i] = (int*)malloc(in_edges[i].size() * sizeof(int));
+		arr_in_edges_count[i] = in_edges[i].size();
+		for (int j = 0; j < in_edges[i].size(); j++) {
+			arr_in_edges[i][j] = in_edges[i][j];
 
 		}
 	}
 
-	int* arr_out_degree;
-	arr_out_degree = new int[V];
+
+	int arr_out_degree[V];
 	for (int i = 0; i < V; ++i) {
 		arr_out_degree[i] = out_degree[i];
 	}
 
-	double** arr_pr;
-	arr_pr = new double* [2];
-	arr_pr[0] = new double[V];
-	arr_pr[1] = new double[V];
+	double arr_pr[2][V];
 
 	for (int i = 0; i < V; ++i) {
 		arr_pr[current][i] = 1.0 / V;
 	}
 
-
-	//cuda allocate PR 
-	
-	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
-	cudaMallocManaged(&int* arr_out_degree, V * sizeof(int));
-	cudaMallocManaged(&int* arr_out_degree, V * sizeof(int));
-
-
+	////cuda allocate PR 
 
 
 	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
 		for (int i = 0; i < V; ++i) {
-
 			double sum = 0;
-			for (int j = 0; j < longest_in_edges; ++j) {
+			for (int j = 0; j < arr_in_edges_count[i]; ++j) {
 				int v = arr_in_edges[i][j];
-
-				if (v > -1) {
-					sum += arr_pr[current][v] / arr_out_degree[v];
-				}
+				sum += arr_pr[current][v] / arr_out_degree[v];
 			}
-
 
 			arr_pr[next][i] = (1.0 - d) / V + d * sum;
 		}
@@ -105,7 +87,11 @@ int main(int argc, char** argv) {
 	}
 
 	for (int i = 0; i < V; ++i) {
-		fprintf(fout, "%.8f\n", arr_pr[current][i]);
+		pr[current][i] = arr_pr[current][i];
+	}
+
+	for (int i = 0; i < V; ++i) {
+		fprintf(fout, "%.8f\n", pr[current][i]);
 	}
 	fclose(fin);
 	fclose(fout);
