@@ -29,7 +29,6 @@ __global__ void oneVertex(int i,
 	int idx = threadIdx.x;
 	int sum = 0;
 
-	
 
 	for (int j = idx + edge_starts[i];
 		j < edge_starts[i + 1]; j += blockSize) {
@@ -48,7 +47,9 @@ __global__ void oneVertex(int i,
 
 	if (idx == 0) {
 
-		
+		arr_pr[0] = i;
+		arr_pr[1] = 1.0;
+
 		arr_pr[i + next * V] = (1.0 - d) / V + d * r[0];
 	}
 	
@@ -164,6 +165,7 @@ int main(int argc, char** argv) {
 
 	for (int i = 0; i < V * 2; ++i) {
 		cout << arr_pr[i];
+		cout << endl;
 	}
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
