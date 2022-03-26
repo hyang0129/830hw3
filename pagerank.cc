@@ -78,19 +78,12 @@ int main(int argc,char** argv){
 
 	//cuda allocate PR 
 
-	
+
 
 
 	for(int iter = 0;iter < M;++iter){
 		int next = 1 - current;
 		for(int i = 0;i < V;++i){
-
-			// parallelize this part first 
-			/*double sum = 0;
-			for(int j = 0;j < in_edges[i].size();++j){
-				int v = in_edges[i][j];
-				sum += pr[current][v] / out_degree[v];
-			}*/
 
 			double sum = 0;
 			for (int j = 0; j < longest_in_edges; ++j) {
