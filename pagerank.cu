@@ -85,8 +85,7 @@ int main(int argc, char** argv) {
 	//create array equivalents 
 
 	int* flat_edges = (int*)malloc(E * sizeof(int));
-	int edge_starts[V + 1];
-	//int* edge_starts = new int[V + 1];
+	int* edge_starts = new int[V + 1];
 
 	int pos = 0; 
 
