@@ -94,10 +94,20 @@ int main(int argc,char** argv){
 		int next = 1 - current;
 		for (int i = 0; i < V; ++i) {
 			double sum = 0;
-			for (int j = 0; j < in_edges[i].size(); ++j) {
-				int v = in_edges[i][j];
+			//for (int j = 0; j < in_edges[i].size(); ++j) {
+			//	int v = in_edges[i][j];
+			//	sum += pr[current][v] / out_degree[v];
+			//}
+
+			int flat_edge_start = flat_edge_locations[i];
+			int flat_edge_end = flat_edge_locations[i + 1];
+		
+			for (int j = flat_edge_start; j < flat_edge_end; ++j) {
+				int v = flat_edges[j];
 				sum += pr[current][v] / out_degree[v];
 			}
+
+
 			pr[next][i] = (1.0 - d) / V + d * sum;
 		}
 		current = next;
