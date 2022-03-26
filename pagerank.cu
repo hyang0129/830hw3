@@ -126,8 +126,6 @@ int main(int argc, char** argv) {
 
 
 	////cuda allocate PR 
-
-
 	int start = 0;
 	int end = 0; 
 
@@ -141,7 +139,7 @@ int main(int argc, char** argv) {
 
 			for (int j = start; j < end; ++j) {
 				int v = flat_edges[j];
-				sum += arr_pr[i + current * V] / arr_out_degree[v];
+				sum += arr_pr[v + current * V] / arr_out_degree[v];
 			}
 
 			arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
