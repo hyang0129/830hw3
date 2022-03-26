@@ -3,7 +3,8 @@
 #include<algorithm>
 #include<queue>
 #include<vector>
-
+#include<iostream>
+using namespace std;
 
 const double d = 0.85;
 int V, E, L, M;
