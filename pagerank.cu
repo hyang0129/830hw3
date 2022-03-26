@@ -144,7 +144,7 @@ int main(int argc, char** argv) {
 			for (int j = edge_starts[i]; j < edge_starts[i + 1]; ++j) {
 				int v = flat_edges[j];
 				
-				sum += arr_pr[v + current * v] / arr_out_degree[v];
+				sum += arr_pr[v + current * V] / arr_out_degree[v];
 				
 			}
 
@@ -179,6 +179,7 @@ int main(int argc, char** argv) {
 	}
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
+
 		cout << arr_pr[i + current * V];
 		cout << " ";
 		cout << edge_starts[i + 1] - edge_starts[i];
