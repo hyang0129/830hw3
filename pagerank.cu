@@ -14,7 +14,7 @@ std::vector<int> out_degree;
 
 
 static const int blockSize = 1024;
-static const int blocks = 1024;
+static const int blocks = 1024*16;
 
 __global__ void allVertex(
 	const int V,
