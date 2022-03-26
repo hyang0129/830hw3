@@ -61,30 +61,30 @@ int main(int argc,char** argv){
 	}
 	flat_edge_locations[V + 1] = num_edges; 
 
-	//int arr_in_edges[V][longest_in_edges];
+	int arr_in_edges[V][longest_in_edges];
 	
-	//for (int i = 0; i < V; ++i) {
-	//	for (int j = 0; j < longest_in_edges; j++) {
-	//		if (j < in_edges[i].size()) {
-	//			arr_in_edges[i][j] = in_edges[i][j];
-	//		}
-	//		else {
-	//			arr_in_edges[i][j] = -1; 
-	//		}
+	for (int i = 0; i < V; ++i) {
+		for (int j = 0; j < longest_in_edges; j++) {
+			if (j < in_edges[i].size()) {
+				arr_in_edges[i][j] = in_edges[i][j];
+			}
+			else {
+				arr_in_edges[i][j] = -1; 
+			}
 
-	//	}
-	//}
+		}
+	}
 
-	//int arr_out_degree[V];
-	//for (int i = 0; i < V; ++i) {
-	//	arr_out_degree[i] = out_degree[i];
-	//}
+	int arr_out_degree[V];
+	for (int i = 0; i < V; ++i) {
+		arr_out_degree[i] = out_degree[i];
+	}
 
-	//double arr_pr[2][V];
+	double arr_pr[2][V];
 
-	//for (int i = 0; i < V; ++i) {
-	//	arr_pr[current][i] = 1.0 / V;
-	//}
+	for (int i = 0; i < V; ++i) {
+		arr_pr[current][i] = 1.0 / V;
+	}
 
 
 	////cuda allocate PR 
