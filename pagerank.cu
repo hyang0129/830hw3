@@ -16,6 +16,9 @@ std::vector<int> out_degree;
 static const int blockSize = 1024;
 static const int blocks = 1024*16;
 
+
+
+
 __global__ void allVertex(
 	const int V,
 	const double d,
@@ -148,8 +151,6 @@ int main(int argc, char** argv) {
 	double* arr_pr  = new double[V*2];
 	//double arr_pr[V * 2];
 
-
-	
 	////cuda allocate PR 
 	cudaMallocManaged(&flat_edges, E * sizeof(int));
 	cudaMallocManaged(&edge_starts, (V + 1) * sizeof(int));
@@ -159,21 +160,49 @@ int main(int argc, char** argv) {
 
 	//assign 
 	int pos = 0;
+	int block_pos = 0;
+	int total_edge_sections = 0; 
+
+	int* edge_sections = (int*)malloc(E * sizeof(int));
+	int* edge_section_to_vertex = (int*)malloc(E * sizeof(int));
 
 	for (int i = 0; i < V; ++i) {
 
 		edge_starts[i] = pos;
+		
+		edge_sections[total_edge_sections] = pos; 
+		edge_section_to_vertex[total_edge_sections] = i;
+
+		++total_edge_sections;
+
 
 		for (int j = 0; j < in_edges[i].size(); j++) {
 			flat_edges[pos] = in_edges[i][j];
+			
 			++pos;
 
-
+			if ((j + 1) % blockSize) {
+				edge_sections[total_edge_sections] = pos;
+				edge_section_to_vertex[total_edge_sections] = i;
+				++total_edge_sections;
+			}
 
 		}
+
 	}
 
 	edge_starts[V] = E;
+
+	int* cu_edge_sections = (int*)malloc(total_edge_sections * sizeof(int));
+	int* cu_edge_section_to_vertex = (int*)malloc(total_edge_sections * sizeof(int));
+	cudaMallocManaged(&cu_edge_sections, total_edge_sections * sizeof(int));
+	cudaMallocManaged(&cu_edge_section_to_vertex, total_edge_sections * sizeof(int));
+
+	for (int i = 0; i < total_edge_sections; ++i) {
+		cu_edge_sections[i] = edge_sections[i];
+		cu_edge_section_to_vertex[i] = edge_section_to_vertex[i];
+	}
+
 
 	for (int i = 0; i < V; ++i) {
 		arr_out_degree[i] = out_degree[i];
