@@ -198,7 +198,7 @@ int main(int argc, char** argv) {
 		arr_pr
 		);
 
-		//cudaDeviceSynchronize();
+		cudaDeviceSynchronize();
 
 		//for (int i = 0; i < V; ++i) {
 			//double sum = 0;
