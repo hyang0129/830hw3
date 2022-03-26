@@ -59,7 +59,6 @@ int main(int argc, char** argv) {
 	out_degree = std::vector<int>(V, 0);
 
 	int longest_in_edges = 0;
-	int num_edges = 0;
 	for (int i = 0; i < E; ++i) {
 		int u, v;
 		fscanf(fin, "%d%d", &u, &v);
@@ -106,17 +105,17 @@ int main(int argc, char** argv) {
 	edge_starts[V] = E; 
 
 
-	int** arr_in_edges = (int**)malloc(V * sizeof(int*));
-	int arr_in_edges_count[V];
+	//int** arr_in_edges = (int**)malloc(V * sizeof(int*));
+	//int arr_in_edges_count[V];
 
-	for (int i = 0; i < V; ++i) {
-		arr_in_edges[i] = (int*)malloc(in_edges[i].size() * sizeof(int));
-		arr_in_edges_count[i] = in_edges[i].size();
-		for (int j = 0; j < in_edges[i].size(); j++) {
-			arr_in_edges[i][j] = in_edges[i][j];
+	//for (int i = 0; i < V; ++i) {
+	//	arr_in_edges[i] = (int*)malloc(in_edges[i].size() * sizeof(int));
+	//	arr_in_edges_count[i] = in_edges[i].size();
+	//	for (int j = 0; j < in_edges[i].size(); j++) {
+	//		arr_in_edges[i][j] = in_edges[i][j];
 
-		}
-	}
+	//	}
+	//}
 
 	int arr_out_degree[V];
 	for (int i = 0; i < V; ++i) {
