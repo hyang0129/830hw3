@@ -136,7 +136,7 @@ int main(int argc, char** argv) {
 	cudaMallocManaged(&flat_edges, E * sizeof(int));
 	cudaMallocManaged(&edge_starts, (V+1) * sizeof(int));
 	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
-	cudaMallocManaged(&arr_pr, 2 * V * sizeof(int));
+	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
 
 
 	for (int iter = 0; iter < M; ++iter) {
