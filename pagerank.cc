@@ -57,7 +57,7 @@ int main(int argc,char** argv){
 			}
 
 		}
-	//}
+	}
 
 	//int* arr_out_degree;
 	//arr_out_degree = new int[V];
