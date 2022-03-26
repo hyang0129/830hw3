@@ -90,23 +90,15 @@ int main(int argc,char** argv){
 	////cuda allocate PR 
 
 
-	for(int iter = 0;iter < M;++iter){
+	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
-
-		for(int i = 0;i < V;++i){
-
+		for (int i = 0; i < V; ++i) {
 			double sum = 0;
-
-			for (int j = flat_edge_locations[i]; j < flat_edge_locations[i + 1]; ++j) {
-				int v = flat_edges[j];
-
-				if (v > -1) {
-					sum += arr_pr[current][v] / arr_out_degree[v];
-				}
+			for (int j = 0; j < in_edges[i].size(); ++j) {
+				int v = in_edges[i][j];
+				sum += pr[current][v] / out_degree[v];
 			}
-
-
-			arr_pr[next][i] = (1.0 - d) / V + d * sum;
+			pr[next][i] = (1.0 - d) / V + d * sum;
 		}
 		current = next;
 	}
@@ -114,7 +106,7 @@ int main(int argc,char** argv){
 
 
 	for(int i = 0;i < V;++i){
-		fprintf(fout,"%.8f\n", arr_pr[current][i]);
+		fprintf(fout,"%.8f\n", pr[current][i]);
 	}
 	fclose(fin);
 	fclose(fout);
