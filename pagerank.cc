@@ -20,7 +20,7 @@ int main(int argc,char** argv){
 	out_degree = std::vector<int>(V,0);
 
 	int longest_in_edges = 0; 
-
+	int num_edges = 0; 
 	for(int i = 0;i < E;++i){
 		int u,v;
 		fscanf(fin,"%d%d",&u,&v);
@@ -32,6 +32,7 @@ int main(int argc,char** argv){
 			longest_in_edges = in_edges[v].size();
 		}
 
+		++num_edges;
 	}
 
 	std::vector<double> pr[2];
@@ -44,6 +45,9 @@ int main(int argc,char** argv){
 
 	//create array equivalents 
 	
+	int flat_edges[num_edges]; 
+	int flat_edge_locations[V + 1]; 
+
 	//int arr_in_edges[V][longest_in_edges];
 	
 	//for (int i = 0; i < V; ++i) {
