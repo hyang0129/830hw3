@@ -45,10 +45,12 @@ int main(int argc, char** argv) {
 
 	//create array equivalents 
 	int** arr_in_edges = (int**)malloc(V * sizeof(int*));
+	int arr_in_edges_count[V]; 
+
 
 	for (int i = 0; i < V; ++i) {
 		arr_in_edges[i] = (int*)malloc(in_edges[i].size() * sizeof(int));
-
+		arr_in_edges_count[i] = in_edges[i].size();
 		for (int j = 0; j < in_edges[i].size(); j++) {
 			arr_in_edges[i][j] = in_edges[i][j];
 
@@ -74,7 +76,7 @@ int main(int argc, char** argv) {
 		int next = 1 - current;
 		for (int i = 0; i < V; ++i) {
 			double sum = 0;
-			for (int j = 0; j < sizeof(arr_in_edges[i]); ++j) {
+			for (int j = 0; j < arr_in_edges_count[i]; ++j) {
 				int v = arr_in_edges[i][j];
 				sum += arr_pr[current][v] / arr_out_degree[v];
 			}
