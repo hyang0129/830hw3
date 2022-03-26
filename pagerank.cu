@@ -145,6 +145,7 @@ int main(int argc, char** argv) {
 
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
+		cout << arr_pr[i + current * V];
 	}
 
 	for (int i = 0; i < V; ++i) {
