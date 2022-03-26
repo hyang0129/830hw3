@@ -133,6 +133,8 @@ int main(int argc, char** argv) {
 	////cuda allocate PR 
 
 
+	int start = 0;
+	int end = 0; 
 
 	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
@@ -143,8 +145,8 @@ int main(int argc, char** argv) {
 			//	sum += arr_pr[current][v] / arr_out_degree[v];
 			//}
 
-			int start = edge_starts[i]; 
-			int end = edge_starts[i+1];
+			start = edge_starts[i]; 
+			end = edge_starts[i+1];
 
 			cout << start;
 			cout << end;
