@@ -24,7 +24,7 @@ __global__ void oneVertex(int i,
 	const int* flat_edges,
 	const int* edge_starts,
 	const int* arr_out_degree, 
-	double* *arr_pr) {
+	double* arr_pr) {
 
 	int idx = threadIdx.x;
 	int sum = 0;
