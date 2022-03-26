@@ -121,7 +121,6 @@ int main(int argc, char** argv) {
 
 	////cuda allocate PR 
 
-	cudaMallocManaged
 
 
 	for (int iter = 0; iter < M; ++iter) {
