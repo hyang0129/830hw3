@@ -148,7 +148,7 @@ int main(int argc, char** argv) {
 				
 			}
 
-			arr_pr[i + next * v] = (1.0 - d) / v + d * sum;
+			arr_pr[i + next * V] = (1.0 - d) / v + d * sum;
 			
 
 			/*oneVertex << <1, blockSize >> > (
