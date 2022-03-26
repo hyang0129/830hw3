@@ -3,7 +3,6 @@
 #include<algorithm>
 #include<queue>
 #include<vector>
-#include <array>
 
 const double d = 0.85;
 int V, E, L, M;
@@ -33,7 +32,7 @@ int main(int argc, char** argv) {
 		pr[current][i] = 1.0 / V;
 	}
 
-	std::array < std::array<double, V>, 2>; 
+	double arr_pr[2][V];
 
 	for (int i = 0; i < V; ++i) {
 		arr_pr[current][i] = 1.0 / V;
@@ -50,7 +49,17 @@ int main(int argc, char** argv) {
 			arr_pr[next][i] = (1.0 - d) / V + d * sum;
 		}
 
-		
+		int same = 1;
+		for (int i = 0; i < V; ++i) {
+			if (current[i] != next[i]) {
+				same = 0;
+			}
+		}
+
+		if (same == 1) {
+			break;
+		}
+
 
 		current = next;
 	}
