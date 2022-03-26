@@ -48,7 +48,10 @@ __global__ void oneVertex(int i,
 
 	if (idx == 0) {
 
-		arr_pr[0] = 1.0;
+		arr_pr[0] = edge_starts[i];
+		arr_pr[1] = edge_starts[i+1];
+
+		arr_pr[i + next * V] = 1.0;
 
 		arr_pr[i + next * V] = (1.0 - d) / V + d * r[0];
 	}
@@ -130,7 +133,6 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < V; ++i) {
 		arr_pr[i + current * V] = 1.0 / V;
 	}
-
 
 
 	for (int iter = 0; iter < M; ++iter) {
