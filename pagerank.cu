@@ -13,7 +13,7 @@ std::vector<std::vector<int>> in_edges;
 std::vector<int> out_degree;
 
 
-static const int blockSize = 1;
+static const int blockSize = 1024;
 
 
 __global__ void oneVertex(int i, 
@@ -133,29 +133,29 @@ int main(int argc, char** argv) {
 		int next = 1 - current;
 
 		for (int i = 0; i < V; ++i) {
-			double sum = 0;
+			//double sum = 0;
 
-			for (int j = edge_starts[i]; j < edge_starts[i + 1]; ++j) {
-				int v = flat_edges[j];
-				
-				sum += arr_pr[v + current * V] / arr_out_degree[v];
-				
-			}
+			//for (int j = edge_starts[i]; j < edge_starts[i + 1]; ++j) {
+			//	int v = flat_edges[j];
+			//	
+			//	sum += arr_pr[v + current * V] / arr_out_degree[v];
+			//	
+			//}
 
-			arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
+			//arr_pr[i + next * V] = (1.0 - d) / V + d * sum;
 			
 
-			//oneVertex << <1, blockSize >> > (
-			//	i,
-			//	V,
-			//	d,
-			//	next,
-			//	current,
-			//	flat_edges,
-			//	edge_starts,
-			//	arr_out_degree,
-			//	arr_pr
-			//	);
+			oneVertex << <1, blockSize >> > (
+				i,
+				V,
+				d,
+				next,
+				current,
+				flat_edges,
+				edge_starts,
+				arr_out_degree,
+				arr_pr
+				);
 
 			//cudaDeviceSynchronize();
 			
