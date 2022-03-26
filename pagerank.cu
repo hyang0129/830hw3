@@ -117,7 +117,7 @@ int main(int argc, char** argv) {
 	//	}
 	//}
 
-	int arr_out_degree[V];
+	int* arr_out_degree = new int[V];
 	for (int i = 0; i < V; ++i) {
 		arr_out_degree[i] = out_degree[i];
 	}
