@@ -4,7 +4,6 @@
 #include<queue>
 #include<vector>
 
-using namespace std;
 
 const double d = 0.85;
 int V,E,L,M;
