@@ -90,6 +90,10 @@ int main(int argc, char** argv) {
 		for (int j = 0; j < in_edges[i].size(); j++) {
 			flat_edges[pos] = in_edges[i][j];
 			++pos;
+
+			cout << pos;
+			cout << endl;
+
 		}
 	}
 
