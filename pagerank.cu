@@ -317,7 +317,7 @@ int main(int argc, char** argv) {
 		cuda_arr_pr
 		);
 
-		//cudaDeviceSynchronize();
+		cudaDeviceSynchronize();
 
 		//int same = 1;
 		//for (int i = 0; i < V; ++i) {
