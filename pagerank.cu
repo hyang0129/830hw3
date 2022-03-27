@@ -159,42 +159,21 @@ int main(int argc, char** argv) {
 
 	//assign 
 	int pos = 0;
-	int total_edge_sections = 0; 
-
-	int* edge_sections = (int*)malloc(500000 * sizeof(int));
-	int* edge_section_to_vertex = (int*)malloc(500000 * sizeof(int));
-	int* vertex_section_starts = new int[V + 1];
 
 	for (int i = 0; i < V; ++i) {
 
 		edge_starts[i] = pos;
-		vertex_section_starts[i] = total_edge_sections;
-
-		edge_sections[total_edge_sections] = pos; 
-		edge_section_to_vertex[total_edge_sections] = i;
-
-		++total_edge_sections;
 
 
 		for (int j = 0; j < in_edges[i].size(); j++) {
 			flat_edges[pos] = in_edges[i][j];
 			
 			++pos;
-
-
-			if (((j + 1) % blockSize) == 0) {
-				edge_sections[total_edge_sections] = pos;
-				edge_section_to_vertex[total_edge_sections] = i;
-				++total_edge_sections;
-			}
-
 		}
 
 	}
 
 	edge_starts[V] = E;
-	edge_sections[total_edge_sections] = E;
-	vertex_section_starts[V] = total_edge_sections; 
 
 	//int* cu_edge_sections = (int*)malloc((total_edge_sections+1) * sizeof(int));
 	//int* cu_edge_section_to_vertex = (int*)malloc(total_edge_sections * sizeof(int));
