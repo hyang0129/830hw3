@@ -62,6 +62,8 @@ __global__ void sum_sections(
 
 		if (idx == 0) {
 			sections_result[section] = r[0];
+			sections_result[section] = 1.0;
+
 		}
 
 	}
@@ -315,8 +317,8 @@ int main(int argc, char** argv) {
 	}
 	cu_edge_sections[total_edge_sections] = E;
 
-	cout << total_edge_sections;
-	cout << endl;
+	//cout << total_edge_sections;
+	//cout << endl;
 
 	for (int i = 0; i < V + 1; ++i) {
 		cu_vertex_section_starts[i] = vertex_section_starts[i];
@@ -381,14 +383,16 @@ int main(int argc, char** argv) {
 		sections_result
 		);
 
-		for (int i = 0; i < total_edge_sections; ++i) {
-			cout << sections_result[i];
-			cout << endl; 
-		}
+
 
 		cudaDeviceSynchronize();
 
-		reduce_sections << <blocks, blockSize >> > (
+		for (int i = 0; i < total_edge_sections; ++i) {
+			cout << sections_result[i];
+			cout << endl;
+		}
+
+		/*reduce_sections << <blocks, blockSize >> > (
 			V,
 			d,
 			next,
@@ -397,7 +401,7 @@ int main(int argc, char** argv) {
 			sections_result
 			);
 
-		cudaDeviceSynchronize();
+		cudaDeviceSynchronize();*/
 
 		current = next;
 	}
