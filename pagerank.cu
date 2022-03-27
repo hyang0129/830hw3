@@ -307,7 +307,9 @@ int main(int argc, char** argv) {
 		cu_edge_sections[i] = edge_sections[i];
 		cu_edge_section_to_vertex[i] = edge_section_to_vertex[i];
 
+
 		cout << cu_edge_sections[i];
+		cout << edge_starts[i];
 		cout << endl;
 	}
 	cu_edge_sections[total_edge_sections] = E;
