@@ -109,7 +109,6 @@ __global__ void reduce_sections(
 
 		if (idx == 0) {
 			arr_pr[vertexblock + next * V] = (1.0 - d) / V + d * r[0];
-			arr_pr[vertexblock + next * V] = 1.5; 
 
 		}
 
