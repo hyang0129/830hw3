@@ -1,6 +1,6 @@
 correct_cnt=0
 
-for i in {1..8}
+for i in {1..5}
 do
 	printf "\nworking on case ${i}:\n"
 	test_data=sample${i}.in
