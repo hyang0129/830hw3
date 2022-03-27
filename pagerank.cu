@@ -62,8 +62,7 @@ __global__ void sum_sections(
 
 		if (idx == 0) {
 			sections_result[section] = r[0];
-			sections_result[section] = 1.5;
-
+			
 		}
 
 	}
