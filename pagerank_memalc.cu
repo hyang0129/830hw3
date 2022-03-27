@@ -310,21 +310,18 @@ int main(int argc, char** argv) {
 	int* cuda_arr_out_degree = new int[V];
 	double* cuda_arr_pr = new double[V * 2];
 
+
 	cudaMalloc((void**)&cuda_flat_edges, E * sizeof(int));
 	cudaMemcpy(cuda_flat_edges, flat_edges, E * sizeof(int), cudaMemcpyHostToDevice);
+
 	cudaMalloc((void**)&edge_starts, (V + 1) * sizeof(int));
 	cudaMemcpy(cuda_edge_starts, edge_starts, (V + 1) * sizeof(int), cudaMemcpyHostToDevice);
 
+	cudaMalloc((void**)&cuda_arr_out_degree, (V) * sizeof(int));
+	cudaMemcpy(cuda_arr_out_degree, arr_out_degree, (V) * sizeof(int), cudaMemcpyHostToDevice);
 
-	cudaMallocManaged(&flat_edges, E * sizeof(int));
-	cudaMallocManaged(&edge_starts, (V + 1) * sizeof(int));
-	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
-	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
-
-	cudaMallocManaged(&cu_edge_sections, (total_edge_sections + 1) * sizeof(int));
-	cudaMallocManaged(&cu_edge_section_to_vertex, total_edge_sections * sizeof(int));
-	cudaMallocManaged(&sections_result, total_edge_sections * sizeof(double));
-	cudaMallocManaged(&cu_vertex_section_starts, (V + 1) * sizeof(int));
+	cudaMalloc((void**)&cuda_arr_pr, 2 * V * sizeof(double));
+	cudaMemcpy(cuda_arr_pr, arr_pr, 2 * V * sizeof(double), cudaMemcpyHostToDevice);
 
 
 	//// standard
