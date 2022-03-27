@@ -14,7 +14,7 @@ std::vector<int> out_degree;
 
 
 static const int blockSize = 1024;
-static const int blocks = 1024*16;
+static const int blocks = 1024*64;
 
 
 __global__ void sum_sections(
