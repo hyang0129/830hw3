@@ -6,7 +6,7 @@ do
 	test_data=sample${i}.in
 	correct_file=sample${i}.out
 	timeout 120s bash compile.sh
-	CUDA_VISIBLE_DEVICES=8 time timeout 60s taskset -c 1-8 bash run.sh ${test_data} output_file
+	CUDA_VISIBLE_DEVICES=8 time timeout 120s taskset -c 1-8 bash run.sh ${test_data} output_file
 	diff -qEwB output_file ${correct_file} > /dev/null
 	res=$?
 	if [ "${res}" -eq "0" ]; then
