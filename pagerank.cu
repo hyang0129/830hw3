@@ -14,7 +14,7 @@ std::vector<int> out_degree;
 
 
 static const int blockSize = 1024;
-static const int blocks = 1024*64;
+static const int blocks = 1024*1;
 
 
 __global__ void sum_sections(
@@ -379,6 +379,8 @@ int main(int argc, char** argv) {
 	cudaMemPrefetchAsync(cu_edge_section_to_vertex, total_edge_sections * sizeof(int), device, NULL);
 	cudaMemPrefetchAsync(sections_result, total_edge_sections * sizeof(double), device, NULL);
 	cudaMemPrefetchAsync(cu_vertex_section_starts, (V + 1) * sizeof(int), device, NULL);
+
+
 
 
 	for (int iter = 0; iter < M; ++iter) {
