@@ -368,6 +368,8 @@ int main(int argc, char** argv) {
 
 	//// super cuda 
 
+
+
 	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
 
@@ -388,14 +390,14 @@ int main(int argc, char** argv) {
 		//	cout << endl;
 		//}
 
-		reduce_sections << <blocks, blockSize >> > (
-			V,
-			d,
-			next,
-			cu_vertex_section_starts,
-			arr_pr,
-			sections_result
-			);
+		//reduce_sections << <blocks, blockSize >> > (
+		//	V,
+		//	d,
+		//	next,
+		//	cu_vertex_section_starts,
+		//	arr_pr,
+		//	sections_result
+		//	);
 
 		cudaDeviceSynchronize();
 
