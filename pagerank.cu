@@ -28,7 +28,7 @@ __global__ void sum_sections(
 	const int* cu_edge_sections_to_vertex,
 	const int* arr_out_degree,
 	const double* arr_pr,
-	double* sections_result, 
+	double* sections_result
 ) {
 
 	int idx = threadIdx.x;
@@ -81,7 +81,7 @@ __global__ void reduce_sections(
 	const int* arr_out_degree,
 	const int* vertex_section_starts,
 	double* arr_pr,
-	const double* sections_result,
+	const double* sections_result
 	) {
 
 	int idx = threadIdx.x;
