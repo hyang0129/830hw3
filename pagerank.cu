@@ -368,7 +368,7 @@ int main(int argc, char** argv) {
 
 
 
-	for (int iter = 0; iter < 1; ++iter) {
+	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
 
 		sum_sections << <blocks, blockSize >> >(
