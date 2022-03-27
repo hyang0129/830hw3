@@ -379,7 +379,7 @@ int main(int argc, char** argv) {
 			vertex_section_starts,
 			arr_pr,
 			sections_result
-		)
+			);
 
 		cudaDeviceSynchronize();
 
