@@ -383,10 +383,6 @@ int main(int argc, char** argv) {
 		sections_result
 		);
 
-
-
-		cudaDeviceSynchronize();
-
 		//for (int i = 0; i < total_edge_sections; ++i) {
 		//	cout << sections_result[i];
 		//	cout << endl;
