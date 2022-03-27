@@ -235,8 +235,8 @@ int main(int argc, char** argv) {
 
 	}
 
-	cout << longest_in_edges;
-	cout << endl;
+	//cout << longest_in_edges;
+	//cout << endl;
 
 	std::vector<double> pr[2];
 	pr[0].resize(V);
