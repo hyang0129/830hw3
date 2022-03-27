@@ -385,19 +385,19 @@ int main(int argc, char** argv) {
 		sections_result
 		);
 
-		//for (int i = 0; i < total_edge_sections; ++i) {
-		//	cout << sections_result[i];
-		//	cout << endl;
-		//}
+		for (int i = 0; i < total_edge_sections; ++i) {
+			cout << sections_result[i];
+			cout << endl;
+		}
 
-		//reduce_sections << <blocks, blockSize >> > (
-		//	V,
-		//	d,
-		//	next,
-		//	cu_vertex_section_starts,
-		//	arr_pr,
-		//	sections_result
-		//	);
+		reduce_sections << <blocks, blockSize >> > (
+			V,
+			d,
+			next,
+			cu_vertex_section_starts,
+			arr_pr,
+			sections_result
+			);
 
 		//cudaDeviceSynchronize();
 
