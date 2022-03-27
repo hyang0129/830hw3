@@ -70,13 +70,7 @@ __global__ void sum_sections(
 __global__ void reduce_sections(
 	const int V,
 	const double d,
-	const int total_edge_sections,
 	const int next,
-	const int current,
-	const int* flat_edges,
-	const int* cu_edge_sections,
-	const int* cu_edge_sections_to_vertex,
-	const int* arr_out_degree,
 	const int* vertex_section_starts,
 	double* arr_pr,
 	const double* sections_result
@@ -93,7 +87,6 @@ __global__ void reduce_sections(
 		// for each vertexblock
 
 		double sum = 0;
-		int v = 0;
 
 		for (int j = idx + vertex_section_starts[vertexblock];
 			j < vertex_section_starts[vertexblock + 1]; 
@@ -379,6 +372,16 @@ int main(int argc, char** argv) {
 
 		cudaDeviceSynchronize();
 
+		reduce_sections << <blocks, blockSize >> > (
+			V,
+			d,
+			next,
+			vertex_section_starts,
+			arr_pr,
+			sections_result
+		)
+
+		cudaDeviceSynchronize();
 
 		current = next;
 	}
@@ -398,8 +401,8 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
 
-		//cout << arr_pr[i + current * V];
-		//cout << endl;
+		cout << arr_pr[i + current * V];
+		cout << endl;
 	}
 
 	for (int i = 0; i < V; ++i) {
