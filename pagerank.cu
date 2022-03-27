@@ -44,6 +44,7 @@ __global__ void sum_sections(
 		for (int j = idx + cu_edge_sections[section];
 			j < cu_edge_sections[section + 1]; 
 			j += blockSize) {
+
 			v = flat_edges[j];
 
 			sum += arr_pr[v + current * V] / arr_out_degree[v];
@@ -314,6 +315,8 @@ int main(int argc, char** argv) {
 	}
 	cu_edge_sections[total_edge_sections] = E;
 
+	cout << total_edge_sections;
+	cout << endl;
 
 	for (int i = 0; i < V + 1; ++i) {
 		cu_vertex_section_starts[i] = vertex_section_starts[i];
