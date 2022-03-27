@@ -322,8 +322,8 @@ int main(int argc, char** argv) {
 
 	for (int i = 0; i < V + 1; ++i) {
 		cu_vertex_section_starts[i] = vertex_section_starts[i];
-		//cout << cu_vertex_section_starts[i];
-		//cout << endl;
+		cout << cu_vertex_section_starts[i];
+		cout << endl;
 	}
 
 
