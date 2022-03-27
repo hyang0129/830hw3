@@ -308,9 +308,9 @@ int main(int argc, char** argv) {
 		cu_edge_section_to_vertex[i] = edge_section_to_vertex[i];
 
 
-		cout << cu_edge_sections[i];
-		cout << edge_starts[i];
-		cout << endl;
+		//cout << cu_edge_sections[i];
+		//cout << edge_starts[i];
+		//cout << endl;
 	}
 	cu_edge_sections[total_edge_sections] = E;
 
@@ -378,6 +378,11 @@ int main(int argc, char** argv) {
 		sections_result
 		);
 
+		for (int i = 0; i < total_edge_sections; ++i) {
+			cout << sections_result[i];
+			cout << endl; 
+		}
+
 		cudaDeviceSynchronize();
 
 		reduce_sections << <blocks, blockSize >> > (
@@ -405,6 +410,9 @@ int main(int argc, char** argv) {
 
 		//cout << endl;
 	}
+
+
+	cout << endl;
 
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
