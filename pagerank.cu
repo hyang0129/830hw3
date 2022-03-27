@@ -311,6 +311,8 @@ int main(int argc, char** argv) {
 
 	for (int i = 0; i < V + 1; ++i) {
 		cu_vertex_section_starts[i] = vertex_section_starts[i];
+		cout >> cu_vertex_section_starts[i];
+		cout >> endl;
 	}
 
 
@@ -355,7 +357,7 @@ int main(int argc, char** argv) {
 
 
 
-	for (int iter = 0; iter < M; ++iter) {
+	for (int iter = 0; iter < 1; ++iter) {
 		int next = 1 - current;
 
 		sum_sections << <blocks, blockSize >> >(
