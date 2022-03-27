@@ -293,6 +293,7 @@ int main(int argc, char** argv) {
 
 	edge_starts[V] = E;
 	edge_sections[total_edge_sections] = E;
+	vertex_section_starts[V] = total_edge_sections; 
 
 	int* cu_edge_sections = (int*)malloc((total_edge_sections+1) * sizeof(int));
 	int* cu_edge_section_to_vertex = (int*)malloc(total_edge_sections * sizeof(int));
