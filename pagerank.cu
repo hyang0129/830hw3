@@ -397,7 +397,7 @@ int main(int argc, char** argv) {
 			V,
 			d,
 			next,
-			vertex_section_starts,
+			cu_vertex_section_starts,
 			arr_pr,
 			sections_result
 			);
