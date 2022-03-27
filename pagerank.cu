@@ -29,7 +29,7 @@ __global__ void allVertex(
 ) {
 
 	int idx = threadIdx.x;
-	
+
 
 	for (int vertexblock = blockIdx.x;
 		vertexblock < V;
@@ -39,7 +39,7 @@ __global__ void allVertex(
 		// for each vertexblock
 
 		double sum = 0;
-		int v = 0; 
+		int v = 0;
 
 		for (int j = idx + edge_starts[vertexblock];
 			j < edge_starts[vertexblock + 1]; j += blockSize) {
