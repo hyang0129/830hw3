@@ -386,12 +386,12 @@ int main(int argc, char** argv) {
 
 		cudaDeviceSynchronize();
 
-		for (int i = 0; i < total_edge_sections; ++i) {
-			cout << sections_result[i];
-			cout << endl;
-		}
+		//for (int i = 0; i < total_edge_sections; ++i) {
+		//	cout << sections_result[i];
+		//	cout << endl;
+		//}
 
-		/*reduce_sections << <blocks, blockSize >> > (
+		reduce_sections << <blocks, blockSize >> > (
 			V,
 			d,
 			next,
@@ -400,7 +400,7 @@ int main(int argc, char** argv) {
 			sections_result
 			);
 
-		cudaDeviceSynchronize();*/
+		cudaDeviceSynchronize();
 
 		current = next;
 	}
