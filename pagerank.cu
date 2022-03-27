@@ -335,77 +335,77 @@ int main(int argc, char** argv) {
 		arr_pr[i + current * V] = 1.0 / V;
 	}
 
-	// standard
-	for (int iter = 0; iter < M; ++iter) {
-		int next = 1 - current;
+	//// standard
+	//for (int iter = 0; iter < M; ++iter) {
+	//	int next = 1 - current;
 
-		allVertex << <blocks, blockSize >> >(
-		V,
-		d,
-		next,
-		current,
-		flat_edges,
-		edge_starts,
-		arr_out_degree,
-		arr_pr
-		);
+	//	allVertex << <blocks, blockSize >> >(
+	//	V,
+	//	d,
+	//	next,
+	//	current,
+	//	flat_edges,
+	//	edge_starts,
+	//	arr_out_degree,
+	//	arr_pr
+	//	);
 
-		cudaDeviceSynchronize();
+	//	cudaDeviceSynchronize();
 
-		int same = 1;
-		for (int i = 0; i < V; ++i) {
-			if (arr_pr[i + current * V] != arr_pr[i + next * V]) {
-				same = 0;
-			}
-		}
+	//	int same = 1;
+	//	for (int i = 0; i < V; ++i) {
+	//		if (arr_pr[i + current * V] != arr_pr[i + next * V]) {
+	//			same = 0;
+	//		}
+	//	}
 
-		if (same == 1) {
-			break;
-		}
+	//	if (same == 1) {
+	//		break;
+	//	}
 
-		current = next;
-	}
+	//	current = next;
+	//}
 
 
 	//// super cuda 
 
-	//for (int iter = 0; iter < M; ++iter) {
-	//	int next = 1 - current;
+	for (int iter = 0; iter < M; ++iter) {
+		int next = 1 - current;
 
-	//	sum_sections << <blocks, blockSize >> >(
-	//	V,
-	//	total_edge_sections,
-	//	current,
-	//	flat_edges,
-	//	cu_edge_sections,
-	//	cu_edge_section_to_vertex,
-	//	arr_out_degree,
-	//	arr_pr,
-	//	sections_result
-	//	);
+		sum_sections << <blocks, blockSize >> >(
+		V,
+		total_edge_sections,
+		current,
+		flat_edges,
+		cu_edge_sections,
+		cu_edge_section_to_vertex,
+		arr_out_degree,
+		arr_pr,
+		sections_result
+		);
 
 
 
-	//	cudaDeviceSynchronize();
+		cudaDeviceSynchronize();
 
-	//	//for (int i = 0; i < total_edge_sections; ++i) {
-	//	//	cout << sections_result[i];
-	//	//	cout << endl;
-	//	//}
+		//for (int i = 0; i < total_edge_sections; ++i) {
+		//	cout << sections_result[i];
+		//	cout << endl;
+		//}
 
-	//	reduce_sections << <blocks, blockSize >> > (
-	//		V,
-	//		d,
-	//		next,
-	//		cu_vertex_section_starts,
-	//		arr_pr,
-	//		sections_result
-	//		);
+		reduce_sections << <blocks, blockSize >> > (
+			V,
+			d,
+			next,
+			cu_vertex_section_starts,
+			arr_pr,
+			sections_result
+			);
 
-	//	cudaDeviceSynchronize();
+		cudaDeviceSynchronize();
 
-	//	current = next;
-	//}
+		current = next;
+	}
 
 
 	// end stuff 
