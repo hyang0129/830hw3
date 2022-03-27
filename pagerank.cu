@@ -289,38 +289,6 @@ int main(int argc, char** argv) {
 	}
 
 	edge_starts[V] = E;
-	edge_sections[total_edge_sections] = E;
-	vertex_section_starts[V] = total_edge_sections; 
-
-	int* cu_edge_sections = (int*)malloc((total_edge_sections+1) * sizeof(int));
-	int* cu_edge_section_to_vertex = (int*)malloc(total_edge_sections * sizeof(int));
-	double* sections_result = (double*)malloc(total_edge_sections * sizeof(double));
-	int* cu_vertex_section_starts = new int[V + 1];
-
-	cudaMallocManaged(&cu_edge_sections, (total_edge_sections + 1) * sizeof(int));
-	cudaMallocManaged(&cu_edge_section_to_vertex, total_edge_sections * sizeof(int));
-	cudaMallocManaged(&sections_result, total_edge_sections * sizeof(double));
-	cudaMallocManaged(&cu_vertex_section_starts, (V + 1) * sizeof(int));
-
-
-
-	for (int i = 0; i < total_edge_sections; ++i) {
-		cu_edge_sections[i] = edge_sections[i];
-		cu_edge_section_to_vertex[i] = edge_section_to_vertex[i];
-
-
-		//cout << cu_edge_sections[i];
-		//cout << edge_starts[i];
-		//cout << endl;
-	}
-	cu_edge_sections[total_edge_sections] = E;
-
-	cout << total_edge_sections;
-	cout << endl;
-
-	for (int i = 0; i < V + 1; ++i) {
-		cu_vertex_section_starts[i] = vertex_section_starts[i];
-	}
 
 
 	for (int i = 0; i < V; ++i) {
