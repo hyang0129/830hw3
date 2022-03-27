@@ -306,14 +306,17 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < total_edge_sections; ++i) {
 		cu_edge_sections[i] = edge_sections[i];
 		cu_edge_section_to_vertex[i] = edge_section_to_vertex[i];
+
+		cout << cu_edge_sections[i];
+		cout << endl;
 	}
 	cu_edge_sections[total_edge_sections] = E;
 
 
 	for (int i = 0; i < V + 1; ++i) {
 		cu_vertex_section_starts[i] = vertex_section_starts[i];
-		cout << cu_vertex_section_starts[i];
-		cout << endl;
+		//cout << cu_vertex_section_starts[i];
+		//cout << endl;
 	}
 
 
