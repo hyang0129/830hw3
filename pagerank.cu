@@ -289,7 +289,7 @@ int main(int argc, char** argv) {
 
 	cudaDeviceSynchronize();
 
-	cudaMemcpy(&arr_pr, cuda_arr_pr, 2 * V * sizeof(double), cudaMemcpyDeviceToHost)
+	cudaMemcpy(&arr_pr, cuda_arr_pr, 2 * V * sizeof(double), cudaMemcpyDeviceToHost);
 
 	cout << endl;
 
