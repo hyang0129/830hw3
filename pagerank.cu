@@ -120,56 +120,6 @@ __global__ void reduce_sections(
 
 
 
-__global__ void allVertex(
-	const int V,
-	const double d,
-	const int next,
-	const int current,
-	const int* flat_edges,
-	const int* edge_starts,
-	const int* arr_out_degree,
-	double* arr_pr
-) {
-
-	int idx = threadIdx.x;
-	
-
-	for (int vertexblock = blockIdx.x;
-		vertexblock < V;
-		vertexblock += blocks
-		) {
-
-		// for each vertexblock
-
-		double sum = 0;
-		int v = 0; 
-
-		for (int j = idx + edge_starts[vertexblock];
-			j < edge_starts[vertexblock + 1]; j += blockSize) {
-			v = flat_edges[j];
-
-			sum += arr_pr[v + current * V] / arr_out_degree[v];
-
-		}
-
-		__shared__ double r[blockSize];
-		r[idx] = sum;
-		__syncthreads();
-		for (int size = blockSize / 2; size > 0; size /= 2) { //uniform
-			if (idx < size)
-				r[idx] += r[idx + size];
-			__syncthreads();
-		}
-
-		if (idx == 0) {
-			arr_pr[vertexblock + next * V] = (1.0 - d) / V + d * r[0];
-		}
-
-	}
-
-
-
-}
 
 __global__ void allVertex(
 	const int V,
