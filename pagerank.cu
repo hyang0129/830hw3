@@ -323,8 +323,6 @@ int main(int argc, char** argv) {
 
 	for (int i = 0; i < V + 1; ++i) {
 		cu_vertex_section_starts[i] = vertex_section_starts[i];
-		cout << cu_vertex_section_starts[i];
-		cout << endl;
 	}
 
 
@@ -426,8 +424,8 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
 
-		cout << arr_pr[i + current * V];
-		cout << endl;
+	/*	cout << arr_pr[i + current * V];
+		cout << endl;*/
 	}
 
 	for (int i = 0; i < V; ++i) {
