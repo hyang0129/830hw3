@@ -19,9 +19,7 @@ static const int blocks = 1024*16;
 
 __global__ void sum_sections(
 	const int V,
-	const double d,
 	const int total_edge_sections,
-	const int next,
 	const int current,
 	const int* flat_edges,
 	const int* cu_edge_sections,
@@ -331,36 +329,60 @@ int main(int argc, char** argv) {
 		arr_pr[i + current * V] = 1.0 / V;
 	}
 
+	//// standard
+	//for (int iter = 0; iter < M; ++iter) {
+	//	int next = 1 - current;
+
+	//	allVertex << <blocks, blockSize >> >(
+	//	V,
+	//	d,
+	//	next,
+	//	current,
+	//	flat_edges,
+	//	edge_starts,
+	//	arr_out_degree,
+	//	arr_pr
+	//	);
+
+	//	cudaDeviceSynchronize();
+
+	//	int same = 1;
+	//	for (int i = 0; i < V; ++i) {
+	//		if (arr_pr[i + current * V] != arr_pr[i + next * V]) {
+	//			same = 0;
+	//		}
+	//	}
+
+	//	if (same == 1) {
+	//		break;
+	//	}
+
+	//	current = next;
+	//}
+
+
 
 	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
 
-		allVertex << <blocks, blockSize >> >(
+		sum_sections << <blocks, blockSize >> >(
 		V,
-		d,
-		next,
+		total_edge_sections,
 		current,
 		flat_edges,
-		edge_starts,
+		cu_edge_sections,
+		cu_edge_sections_to_vertex,
 		arr_out_degree,
-		arr_pr
+		arr_pr,
+		sections_result
 		);
 
 		cudaDeviceSynchronize();
 
-		int same = 1;
-		for (int i = 0; i < V; ++i) {
-			if (arr_pr[i + current * V] != arr_pr[i + next * V]) {
-				same = 0;
-			}
-		}
-
-		if (same == 1) {
-			break;
-		}
 
 		current = next;
 	}
+
 
 	// end stuff 
 
