@@ -277,11 +277,8 @@ int main(int argc, char** argv) {
 			
 			++pos;
 
-			cout << j;
-			cout << endl;
 
-
-			if ((j + 1) % blockSize) {
+			if (((j + 1) % blockSize) == 0) {
 				edge_sections[total_edge_sections] = pos;
 				edge_section_to_vertex[total_edge_sections] = i;
 				++total_edge_sections;
