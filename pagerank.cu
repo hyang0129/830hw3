@@ -247,10 +247,10 @@ int main(int argc, char** argv) {
 	//double arr_pr[V * 2];
 
 	////cuda allocate PR 
-	//cudaMallocManaged(&flat_edges, E * sizeof(int));
-	//cudaMallocManaged(&edge_starts, (V + 1) * sizeof(int));
-	//cudaMallocManaged(&arr_out_degree, V * sizeof(int));
-	//cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
+	cudaMallocManaged(&flat_edges, E * sizeof(int));
+	cudaMallocManaged(&edge_starts, (V + 1) * sizeof(int));
+	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
+	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
 
 
 	//assign 
@@ -282,26 +282,6 @@ int main(int argc, char** argv) {
 		arr_pr[i + current * V] = 1.0 / V;
 	}
 
-
-	int* cuda_flat_edges = (int*)malloc(E * sizeof(int));
-	int* cuda_edge_starts = new int[V + 1];
-	int* cuda_arr_out_degree = new int[V];
-	double* cuda_arr_pr = new double[V * 2];
-
-
-	cudaMalloc((void**)&cuda_flat_edges, E * sizeof(int));
-	cudaMemcpy(cuda_flat_edges, flat_edges, E * sizeof(int), cudaMemcpyHostToDevice);
-
-	cudaMalloc((void**)&edge_starts, (V + 1) * sizeof(int));
-	cudaMemcpy(cuda_edge_starts, edge_starts, (V + 1) * sizeof(int), cudaMemcpyHostToDevice);
-
-	cudaMalloc((void**)&cuda_arr_out_degree, (V) * sizeof(int));
-	cudaMemcpy(cuda_arr_out_degree, arr_out_degree, (V) * sizeof(int), cudaMemcpyHostToDevice);
-
-	cudaMalloc((void**)&cuda_arr_pr, 2 * V * sizeof(double));
-	cudaMemcpy(cuda_arr_pr, arr_pr, 2 * V * sizeof(double), cudaMemcpyHostToDevice);
-
-
 	// standard
 	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
@@ -311,13 +291,13 @@ int main(int argc, char** argv) {
 		d,
 		next,
 		current,
-		cuda_flat_edges,
-		cuda_edge_starts,
-		cuda_arr_out_degree,
-		cuda_arr_pr
+		flat_edges,
+		edge_starts,
+		arr_out_degree,
+		arr_pr
 		);
 
-		cudaDeviceSynchronize();
+		//cudaDeviceSynchronize();
 
 		//int same = 1;
 		//for (int i = 0; i < V; ++i) {
@@ -334,11 +314,8 @@ int main(int argc, char** argv) {
 	}
 
 
+
 	cudaDeviceSynchronize();
-
-	cudaMemcpy(arr_pr, cuda_arr_pr, 2 * V * sizeof(double), cudaMemcpyDeviceToHost);
-
-
 
 	for (int i = 0; i < V * 2; ++i) {
 		//cout << arr_pr[i];
@@ -353,8 +330,8 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
 
-		cout << arr_pr[i + current * V];
-		cout << endl;
+	/*	cout << arr_pr[i + current * V];
+		cout << endl;*/
 	}
 
 	for (int i = 0; i < V; ++i) {
