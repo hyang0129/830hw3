@@ -151,10 +151,10 @@ int main(int argc, char** argv) {
 	//double arr_pr[V * 2];
 
 	////cuda allocate PR 
-	cudaMallocManaged(&flat_edges, E * sizeof(int));
-	cudaMallocManaged(&edge_starts, (V + 1) * sizeof(int));
-	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
-	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
+	//cudaMallocManaged(&flat_edges, E * sizeof(int));
+	//cudaMallocManaged(&edge_starts, (V + 1) * sizeof(int));
+	//cudaMallocManaged(&arr_out_degree, V * sizeof(int));
+	//cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
 
 
 	//assign 
@@ -235,14 +235,22 @@ int main(int argc, char** argv) {
 	}
 
 
+	int* cuda_flat_edges = (int*)malloc(E * sizeof(int));
+	int* cuda_edge_starts = new int[V + 1];
+	int* cuda_arr_out_degree = new int[V];
+	double* cuda_arr_pr = new double[V * 2];
+
 	cudaMalloc((void**)&cuda_flat_edges, E * sizeof(int));
 	cudaMemcpy(cuda_flat_edges, flat_edges, E * sizeof(int), cudaMemcpyHostToDevice);
+
 	cudaMalloc((void**)&edge_starts, (V + 1) * sizeof(int));
 	cudaMemcpy(cuda_edge_starts, edge_starts, (V + 1) * sizeof(int), cudaMemcpyHostToDevice);
 
-	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
-	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
+	cudaMalloc((void**)&cuda_arr_out_degree, (V) * sizeof(int));
+	cudaMemcpy(cuda_arr_out_degree, arr_out_degree, (V) * sizeof(int), cudaMemcpyHostToDevice);
 
+	cudaMalloc((void**)&cuda_arr_pr, 2 * V * sizeof(double));
+	cudaMemcpy(cuda_arr_pr, arr_pr, 2 * V * sizeof(double), cudaMemcpyHostToDevice);
 
 
 	// standard
@@ -254,10 +262,10 @@ int main(int argc, char** argv) {
 		d,
 		next,
 		current,
-		flat_edges,
-		edge_starts,
-		arr_out_degree,
-		arr_pr
+		cuda_flat_edges,
+			cuda_edge_starts,
+			cuda_arr_out_degree,
+			cuda_arr_pr
 		);
 
 		//cudaDeviceSynchronize();
@@ -281,13 +289,7 @@ int main(int argc, char** argv) {
 
 	cudaDeviceSynchronize();
 
-	for (int i = 0; i < V * 2; ++i) {
-		//cout << arr_pr[i];
-		//cout << edge_starts[i];
-
-		//cout << endl;
-	}
-
+	cudaMemcpy(&arr_pr, cuda_arr_pr, 2 * V * sizeof(double), cudaMemcpyDeviceToHost)
 
 	cout << endl;
 
@@ -302,15 +304,16 @@ int main(int argc, char** argv) {
 		fprintf(fout, "%.8f\n", pr[current][i]);
 	}
 
-	cudaFree(flat_edges);
-	cudaFree(edge_starts);
-	cudaFree(arr_out_degree);
-	cudaFree(arr_pr);
-	cudaFree(cu_edge_sections);
-	cudaFree(cu_edge_section_to_vertex);
-	cudaFree(sections_result);
-	cudaFree(cu_vertex_section_starts);
+	cudaFree(cuda_flat_edges);
+	cudaFree(cuda_edge_starts);
+	cudaFree(cuda_arr_out_degree);
+	cudaFree(cuda_arr_pr);
 
+
+	//cudaFree(flat_edges);
+	//cudaFree(edge_starts);
+	//cudaFree(arr_out_degree);
+	//cudaFree(arr_pr);
 
 	fclose(fin);
 	fclose(fout);
