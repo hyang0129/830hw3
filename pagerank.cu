@@ -277,8 +277,7 @@ int main(int argc, char** argv) {
 			
 			++pos;
 
-			cout << (j + 1) % blockSize;
-			cout << (j + 1);
+			cout << j;
 			cout << endl;
 
 
