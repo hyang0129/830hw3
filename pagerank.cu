@@ -399,7 +399,7 @@ int main(int argc, char** argv) {
 		//	sections_result
 		//	);
 
-		cudaDeviceSynchronize();
+		//cudaDeviceSynchronize();
 
 		current = next;
 	}
@@ -434,6 +434,11 @@ int main(int argc, char** argv) {
 	cudaFree(edge_starts);
 	cudaFree(arr_out_degree);
 	cudaFree(arr_pr);
+	cudaFree(cu_edge_sections);
+	cudaFree(cu_edge_section_to_vertex);
+	cudaFree(sections_result);
+	cudaFree(cu_vertex_section_starts);
+
 
 	fclose(fin);
 	fclose(fout);
