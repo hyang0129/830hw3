@@ -334,88 +334,88 @@ int main(int argc, char** argv) {
 		arr_pr[i + current * V] = 1.0 / V;
 	}
 
-	//// standard
-	//for (int iter = 0; iter < M; ++iter) {
-	//	int next = 1 - current;
+	// standard
+	for (int iter = 0; iter < M; ++iter) {
+		int next = 1 - current;
 
-	//	allVertex << <blocks, blockSize >> >(
-	//	V,
-	//	d,
-	//	next,
-	//	current,
-	//	flat_edges,
-	//	edge_starts,
-	//	arr_out_degree,
-	//	arr_pr
-	//	);
+		allVertex << <blocks, blockSize >> >(
+		V,
+		d,
+		next,
+		current,
+		flat_edges,
+		edge_starts,
+		arr_out_degree,
+		arr_pr
+		);
 
-	//	cudaDeviceSynchronize();
+		cudaDeviceSynchronize();
 
-	//	int same = 1;
-	//	for (int i = 0; i < V; ++i) {
-	//		if (arr_pr[i + current * V] != arr_pr[i + next * V]) {
-	//			same = 0;
-	//		}
-	//	}
+		int same = 1;
+		for (int i = 0; i < V; ++i) {
+			if (arr_pr[i + current * V] != arr_pr[i + next * V]) {
+				same = 0;
+			}
+		}
 
-	//	if (same == 1) {
-	//		break;
-	//	}
+		if (same == 1) {
+			break;
+		}
 
-	//	current = next;
-	//}
+		current = next;
+	}
 
 
 	//// super cuda 
 
-	int device = -1;
-	cudaGetDevice(&device);
+	//int device = -1;
+	//cudaGetDevice(&device);
 
-	cudaMemPrefetchAsync(flat_edges, E * sizeof(int), device, NULL);
-	cudaMemPrefetchAsync(edge_starts, (V + 1) * sizeof(int), device, NULL);
-	cudaMemPrefetchAsync(arr_out_degree, V * sizeof(int), device, NULL);
-	cudaMemPrefetchAsync(arr_pr, 2 * V * sizeof(double), device, NULL);
-	cudaMemPrefetchAsync(cu_edge_sections, (total_edge_sections + 1) * sizeof(int), device, NULL);
-	cudaMemPrefetchAsync(cu_edge_section_to_vertex, total_edge_sections * sizeof(int), device, NULL);
-	cudaMemPrefetchAsync(sections_result, total_edge_sections * sizeof(double), device, NULL);
-	cudaMemPrefetchAsync(cu_vertex_section_starts, (V + 1) * sizeof(int), device, NULL);
-
-
+	//cudaMemPrefetchAsync(flat_edges, E * sizeof(int), device, NULL);
+	//cudaMemPrefetchAsync(edge_starts, (V + 1) * sizeof(int), device, NULL);
+	//cudaMemPrefetchAsync(arr_out_degree, V * sizeof(int), device, NULL);
+	//cudaMemPrefetchAsync(arr_pr, 2 * V * sizeof(double), device, NULL);
+	//cudaMemPrefetchAsync(cu_edge_sections, (total_edge_sections + 1) * sizeof(int), device, NULL);
+	//cudaMemPrefetchAsync(cu_edge_section_to_vertex, total_edge_sections * sizeof(int), device, NULL);
+	//cudaMemPrefetchAsync(sections_result, total_edge_sections * sizeof(double), device, NULL);
+	//cudaMemPrefetchAsync(cu_vertex_section_starts, (V + 1) * sizeof(int), device, NULL);
 
 
-	for (int iter = 0; iter < M; ++iter) {
-		int next = 1 - current;
 
-		sum_sections << <blocks, blockSize >> >(
-		V,
-		total_edge_sections,
-		current,
-		flat_edges,
-		cu_edge_sections,
-		cu_edge_section_to_vertex,
-		arr_out_degree,
-		arr_pr,
-		sections_result
-		);
 
-		//for (int i = 0; i < total_edge_sections; ++i) {
-		//	cout << sections_result[i];
-		//	cout << endl;
-		//}
+	//for (int iter = 0; iter < M; ++iter) {
+	//	int next = 1 - current;
 
-		reduce_sections << <blocks, blockSize >> > (
-			V,
-			d,
-			next,
-			cu_vertex_section_starts,
-			arr_pr,
-			sections_result
-			);
+	//	sum_sections << <blocks, blockSize >> >(
+	//	V,
+	//	total_edge_sections,
+	//	current,
+	//	flat_edges,
+	//	cu_edge_sections,
+	//	cu_edge_section_to_vertex,
+	//	arr_out_degree,
+	//	arr_pr,
+	//	sections_result
+	//	);
 
-		//cudaDeviceSynchronize();
+	//	//for (int i = 0; i < total_edge_sections; ++i) {
+	//	//	cout << sections_result[i];
+	//	//	cout << endl;
+	//	//}
 
-		current = next;
-	}
+	//	reduce_sections << <blocks, blockSize >> > (
+	//		V,
+	//		d,
+	//		next,
+	//		cu_vertex_section_starts,
+	//		arr_pr,
+	//		sections_result
+	//		);
+
+	//	//cudaDeviceSynchronize();
+
+	//	current = next;
+	//}
 
 
 	// end stuff 
