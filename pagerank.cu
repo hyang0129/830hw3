@@ -14,111 +14,7 @@ std::vector<int> out_degree;
 
 
 static const int blockSize = 1024;
-static const int blocks = 1024*4;
-
-
-__global__ void sum_sections(
-	const int V,
-	const int total_edge_sections,
-	const int current,
-	const int* flat_edges,
-	const int* cu_edge_sections,
-	const int* cu_edge_sections_to_vertex,
-	const int* arr_out_degree,
-	const double* arr_pr,
-	double* sections_result
-) {
-
-	int idx = threadIdx.x;
-
-	for (int section = blockIdx.x;
-		section < total_edge_sections;
-		section += blocks
-		) {
-
-		// for each section
-
-		double sum = 0;
-		int v = 0;
-
-		for (int j = idx + cu_edge_sections[section];
-			j < cu_edge_sections[section + 1]; 
-			j += blockSize) {
-
-			v = flat_edges[j];
-
-			sum += arr_pr[v + current * V] / arr_out_degree[v];
-
-		}
-
-		__shared__ double r[blockSize];
-		r[idx] = sum;
-		__syncthreads();
-		for (int size = blockSize / 2; size > 0; size /= 2) { //uniform
-			if (idx < size)
-				r[idx] += r[idx + size];
-			__syncthreads();
-		}
-
-		if (idx == 0) {
-			sections_result[section] = r[0];
-			
-		}
-
-	}
-
-
-
-}
-
-
-__global__ void reduce_sections(
-	const int V,
-	const double d,
-	const int next,
-	const int* vertex_section_starts,
-	double* arr_pr,
-	const double* sections_result
-	) {
-
-	int idx = threadIdx.x;
-
-
-	for (int vertexblock = blockIdx.x;
-		vertexblock < V;
-		vertexblock += blocks
-		) {
-
-		// for each vertexblock
-
-		double sum = 0;
-
-		for (int j = idx + vertex_section_starts[vertexblock];
-			j < vertex_section_starts[vertexblock + 1]; 
-			j += blockSize) {
-			
-			sum += sections_result[j];
-
-		}
-
-		__shared__ double r[blockSize];
-		r[idx] = sum;
-		__syncthreads();
-		for (int size = blockSize / 2; size > 0; size /= 2) { //uniform
-			if (idx < size)
-				r[idx] += r[idx + size];
-			__syncthreads();
-		}
-
-		if (idx == 0) {
-			arr_pr[vertexblock + next * V] = (1.0 - d) / V + d * r[0];
-
-		}
-
-	}
-}
-
-
+static const int blocks = 1024*8;
 
 
 __global__ void allVertex(
@@ -343,18 +239,6 @@ int main(int argc, char** argv) {
 	for (int iter = 0; iter < M; ++iter) {
 		int next = 1 - current;
 
-		//int device = -1;
-		//cudaGetDevice(&device);
-
-		//cudaMemPrefetchAsync(flat_edges, E * sizeof(int), device, NULL);
-		//cudaMemPrefetchAsync(edge_starts, (V + 1) * sizeof(int), device, NULL);
-		//cudaMemPrefetchAsync(arr_out_degree, V * sizeof(int), device, NULL);
-		//cudaMemPrefetchAsync(arr_pr, 2 * V * sizeof(double), device, NULL);
-		//cudaMemPrefetchAsync(cu_edge_sections, (total_edge_sections + 1) * sizeof(int), device, NULL);
-		//cudaMemPrefetchAsync(cu_edge_section_to_vertex, total_edge_sections * sizeof(int), device, NULL);
-		//cudaMemPrefetchAsync(sections_result, total_edge_sections * sizeof(double), device, NULL);
-		//cudaMemPrefetchAsync(cu_vertex_section_starts, (V + 1) * sizeof(int), device, NULL);
-
 		allVertex << <blocks, blockSize >> >(
 		V,
 		d,
@@ -381,46 +265,6 @@ int main(int argc, char** argv) {
 
 		current = next;
 	}
-
-
-	//// super cuda 
-
-
-
-
-	//for (int iter = 0; iter < M; ++iter) {
-	//	int next = 1 - current;
-
-	//	sum_sections << <blocks, blockSize >> >(
-	//	V,
-	//	total_edge_sections,
-	//	current,
-	//	flat_edges,
-	//	cu_edge_sections,
-	//	cu_edge_section_to_vertex,
-	//	arr_out_degree,
-	//	arr_pr,
-	//	sections_result
-	//	);
-
-	//	//for (int i = 0; i < total_edge_sections; ++i) {
-	//	//	cout << sections_result[i];
-	//	//	cout << endl;
-	//	//}
-
-	//	reduce_sections << <blocks, blockSize >> > (
-	//		V,
-	//		d,
-	//		next,
-	//		cu_vertex_section_starts,
-	//		arr_pr,
-	//		sections_result
-	//		);
-
-	//	//cudaDeviceSynchronize();
-
-	//	current = next;
-	//}
 
 
 	// end stuff 
