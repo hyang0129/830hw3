@@ -297,18 +297,18 @@ int main(int argc, char** argv) {
 		arr_pr
 		);
 
-		//cudaDeviceSynchronize();
+		cudaDeviceSynchronize();
 
-		//int same = 1;
-		//for (int i = 0; i < V; ++i) {
-		//	if (arr_pr[i + current * V] != arr_pr[i + next * V]) {
-		//		same = 0;
-		//	}
-		//}
+		int same = 1;
+		for (int i = 0; i < V; ++i) {
+			if (arr_pr[i + current * V] != arr_pr[i + next * V]) {
+				same = 0;
+			}
+		}
 
-		//if (same == 1) {
-		//	break;
-		//}
+		if (same == 1) {
+			break;
+		}
 
 		current = next;
 	}
