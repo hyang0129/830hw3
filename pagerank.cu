@@ -371,7 +371,7 @@ int main(int argc, char** argv) {
 		current,
 		flat_edges,
 		cu_edge_sections,
-		cu_edge_sections_to_vertex,
+		cu_edge_section_to_vertex,
 		arr_out_degree,
 		arr_pr,
 		sections_result
