@@ -263,9 +263,9 @@ int main(int argc, char** argv) {
 		next,
 		current,
 		cuda_flat_edges,
-			cuda_edge_starts,
-			cuda_arr_out_degree,
-			cuda_arr_pr
+		cuda_edge_starts,
+		cuda_arr_out_degree,
+		cuda_arr_pr
 		);
 
 		//cudaDeviceSynchronize();
