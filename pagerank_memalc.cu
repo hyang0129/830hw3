@@ -14,7 +14,7 @@ std::vector<int> out_degree;
 
 
 static const int blockSize = 1024;
-static const int blocks = 1024*1;
+static const int blocks = 1024 * 1;
 
 
 __global__ void sum_sections(
@@ -42,7 +42,7 @@ __global__ void sum_sections(
 		int v = 0;
 
 		for (int j = idx + cu_edge_sections[section];
-			j < cu_edge_sections[section + 1]; 
+			j < cu_edge_sections[section + 1];
 			j += blockSize) {
 
 			v = flat_edges[j];
@@ -62,7 +62,7 @@ __global__ void sum_sections(
 
 		if (idx == 0) {
 			sections_result[section] = r[0];
-			
+
 		}
 
 	}
@@ -76,7 +76,7 @@ __global__ void reduce_sections(
 	const int* vertex_section_starts,
 	double* arr_pr,
 	const double* sections_result
-	) {
+) {
 
 	int idx = threadIdx.x;
 
@@ -91,9 +91,9 @@ __global__ void reduce_sections(
 		double sum = 0;
 
 		for (int j = idx + vertex_section_starts[vertexblock];
-			j < vertex_section_starts[vertexblock + 1]; 
+			j < vertex_section_starts[vertexblock + 1];
 			j += blockSize) {
-			
+
 			sum += sections_result[j];
 
 		}
@@ -129,7 +129,7 @@ __global__ void allVertex(
 ) {
 
 	int idx = threadIdx.x;
-	
+
 
 	for (int vertexblock = blockIdx.x;
 		vertexblock < V;
@@ -139,7 +139,7 @@ __global__ void allVertex(
 		// for each vertexblock
 
 		double sum = 0;
-		int v = 0; 
+		int v = 0;
 
 		for (int j = idx + edge_starts[vertexblock];
 			j < edge_starts[vertexblock + 1]; j += blockSize) {
@@ -169,14 +169,14 @@ __global__ void allVertex(
 }
 
 
-__global__ void oneVertex(int i, 
-	const int V, 
+__global__ void oneVertex(int i,
+	const int V,
 	const double d,
 	const int next,
-	const int current, 
+	const int current,
 	const int* flat_edges,
 	const int* edge_starts,
-	const int* arr_out_degree, 
+	const int* arr_out_degree,
 	double* arr_pr) {
 
 	int idx = threadIdx.x;
@@ -202,12 +202,12 @@ __global__ void oneVertex(int i,
 
 
 	if (idx == 0) {
-	
+
 		arr_pr[i + next * V] = (1.0 - d) / V + d * r[0];
 	}
-	
 
-	}
+
+}
 
 
 int main(int argc, char** argv) {
@@ -246,19 +246,14 @@ int main(int argc, char** argv) {
 	int* flat_edges = (int*)malloc(E * sizeof(int));
 	int* edge_starts = new int[V + 1];
 	int* arr_out_degree = new int[V];
-	double* arr_pr  = new double[V*2];
+	double* arr_pr = new double[V * 2];
 	//double arr_pr[V * 2];
 
 	////cuda allocate PR 
-	cudaMallocManaged(&flat_edges, E * sizeof(int));
-	cudaMallocManaged(&edge_starts, (V + 1) * sizeof(int));
-	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
-	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
-
 
 	//assign 
 	int pos = 0;
-	int total_edge_sections = 0; 
+	int total_edge_sections = 0;
 
 	int* edge_sections = (int*)malloc(500000 * sizeof(int));
 	int* edge_section_to_vertex = (int*)malloc(500000 * sizeof(int));
@@ -269,7 +264,7 @@ int main(int argc, char** argv) {
 		edge_starts[i] = pos;
 		vertex_section_starts[i] = total_edge_sections;
 
-		edge_sections[total_edge_sections] = pos; 
+		edge_sections[total_edge_sections] = pos;
 		edge_section_to_vertex[total_edge_sections] = i;
 
 		++total_edge_sections;
@@ -277,7 +272,7 @@ int main(int argc, char** argv) {
 
 		for (int j = 0; j < in_edges[i].size(); j++) {
 			flat_edges[pos] = in_edges[i][j];
-			
+
 			++pos;
 
 
@@ -293,37 +288,13 @@ int main(int argc, char** argv) {
 
 	edge_starts[V] = E;
 	edge_sections[total_edge_sections] = E;
-	vertex_section_starts[V] = total_edge_sections; 
+	vertex_section_starts[V] = total_edge_sections;
 
-	int* cu_edge_sections = (int*)malloc((total_edge_sections+1) * sizeof(int));
+	int* cu_edge_sections = (int*)malloc((total_edge_sections + 1) * sizeof(int));
 	int* cu_edge_section_to_vertex = (int*)malloc(total_edge_sections * sizeof(int));
 	double* sections_result = (double*)malloc(total_edge_sections * sizeof(double));
 	int* cu_vertex_section_starts = new int[V + 1];
 
-	cudaMallocManaged(&cu_edge_sections, (total_edge_sections + 1) * sizeof(int));
-	cudaMallocManaged(&cu_edge_section_to_vertex, total_edge_sections * sizeof(int));
-	cudaMallocManaged(&sections_result, total_edge_sections * sizeof(double));
-	cudaMallocManaged(&cu_vertex_section_starts, (V + 1) * sizeof(int));
-
-
-
-	for (int i = 0; i < total_edge_sections; ++i) {
-		cu_edge_sections[i] = edge_sections[i];
-		cu_edge_section_to_vertex[i] = edge_section_to_vertex[i];
-
-
-		//cout << cu_edge_sections[i];
-		//cout << edge_starts[i];
-		//cout << endl;
-	}
-	cu_edge_sections[total_edge_sections] = E;
-
-	//cout << total_edge_sections;
-	//cout << endl;
-
-	for (int i = 0; i < V + 1; ++i) {
-		cu_vertex_section_starts[i] = vertex_section_starts[i];
-	}
 
 
 	for (int i = 0; i < V; ++i) {
@@ -334,48 +305,70 @@ int main(int argc, char** argv) {
 		arr_pr[i + current * V] = 1.0 / V;
 	}
 
-	// standard
-	for (int iter = 0; iter < M; ++iter) {
-		int next = 1 - current;
+	int* cuda_flat_edges = (int*)malloc(E * sizeof(int));
+	int* cuda_edge_starts = new int[V + 1];
+	int* cuda_arr_out_degree = new int[V];
+	double* cuda_arr_pr = new double[V * 2];
 
-		//int device = -1;
-		//cudaGetDevice(&device);
+	cudaMalloc((void**)&cuda_flat_edges, E * sizeof(int));
+	cudaMemcpy(cuda_flat_edges, flat_edges, E * sizeof(int), cudaMemcpyHostToDevice);
+	cudaMalloc((void**)&edge_starts, (V + 1) * sizeof(int));
+	cudaMemcpy(cuda_edge_starts, edge_starts, (V + 1) * sizeof(int), cudaMemcpyHostToDevice);
 
-		//cudaMemPrefetchAsync(flat_edges, E * sizeof(int), device, NULL);
-		//cudaMemPrefetchAsync(edge_starts, (V + 1) * sizeof(int), device, NULL);
-		//cudaMemPrefetchAsync(arr_out_degree, V * sizeof(int), device, NULL);
-		//cudaMemPrefetchAsync(arr_pr, 2 * V * sizeof(double), device, NULL);
-		//cudaMemPrefetchAsync(cu_edge_sections, (total_edge_sections + 1) * sizeof(int), device, NULL);
-		//cudaMemPrefetchAsync(cu_edge_section_to_vertex, total_edge_sections * sizeof(int), device, NULL);
-		//cudaMemPrefetchAsync(sections_result, total_edge_sections * sizeof(double), device, NULL);
-		//cudaMemPrefetchAsync(cu_vertex_section_starts, (V + 1) * sizeof(int), device, NULL);
 
-		allVertex << <blocks, blockSize >> >(
-		V,
-		d,
-		next,
-		current,
-		flat_edges,
-		edge_starts,
-		arr_out_degree,
-		arr_pr
-		);
+	cudaMallocManaged(&flat_edges, E * sizeof(int));
+	cudaMallocManaged(&edge_starts, (V + 1) * sizeof(int));
+	cudaMallocManaged(&arr_out_degree, V * sizeof(int));
+	cudaMallocManaged(&arr_pr, 2 * V * sizeof(double));
 
-		//cudaDeviceSynchronize();
+	cudaMallocManaged(&cu_edge_sections, (total_edge_sections + 1) * sizeof(int));
+	cudaMallocManaged(&cu_edge_section_to_vertex, total_edge_sections * sizeof(int));
+	cudaMallocManaged(&sections_result, total_edge_sections * sizeof(double));
+	cudaMallocManaged(&cu_vertex_section_starts, (V + 1) * sizeof(int));
 
-		//int same = 1;
-		//for (int i = 0; i < V; ++i) {
-		//	if (arr_pr[i + current * V] != arr_pr[i + next * V]) {
-		//		same = 0;
-		//	}
-		//}
 
-		//if (same == 1) {
-		//	break;
-		//}
+	//// standard
+	//for (int iter = 0; iter < M; ++iter) {
+	//	int next = 1 - current;
 
-		current = next;
-	}
+	//	//int device = -1;
+	//	//cudaGetDevice(&device);
+
+	//	//cudaMemPrefetchAsync(flat_edges, E * sizeof(int), device, NULL);
+	//	//cudaMemPrefetchAsync(edge_starts, (V + 1) * sizeof(int), device, NULL);
+	//	//cudaMemPrefetchAsync(arr_out_degree, V * sizeof(int), device, NULL);
+	//	//cudaMemPrefetchAsync(arr_pr, 2 * V * sizeof(double), device, NULL);
+	//	//cudaMemPrefetchAsync(cu_edge_sections, (total_edge_sections + 1) * sizeof(int), device, NULL);
+	//	//cudaMemPrefetchAsync(cu_edge_section_to_vertex, total_edge_sections * sizeof(int), device, NULL);
+	//	//cudaMemPrefetchAsync(sections_result, total_edge_sections * sizeof(double), device, NULL);
+	//	//cudaMemPrefetchAsync(cu_vertex_section_starts, (V + 1) * sizeof(int), device, NULL);
+
+	//	allVertex << <blocks, blockSize >> >(
+	//	V,
+	//	d,
+	//	next,
+	//	current,
+	//	flat_edges,
+	//	edge_starts,
+	//	arr_out_degree,
+	//	arr_pr
+	//	);
+
+	//	//cudaDeviceSynchronize();
+
+	//	int same = 1;
+	//	for (int i = 0; i < V; ++i) {
+	//		if (arr_pr[i + current * V] != arr_pr[i + next * V]) {
+	//			same = 0;
+	//		}
+	//	}
+
+	//	if (same == 1) {
+	//		break;
+	//	}
+
+	//	current = next;
+	//}
 
 
 	//// super cuda 
@@ -383,39 +376,39 @@ int main(int argc, char** argv) {
 
 
 
-	//for (int iter = 0; iter < M; ++iter) {
-	//	int next = 1 - current;
+	for (int iter = 0; iter < M; ++iter) {
+		int next = 1 - current;
 
-	//	sum_sections << <blocks, blockSize >> >(
-	//	V,
-	//	total_edge_sections,
-	//	current,
-	//	flat_edges,
-	//	cu_edge_sections,
-	//	cu_edge_section_to_vertex,
-	//	arr_out_degree,
-	//	arr_pr,
-	//	sections_result
-	//	);
+		sum_sections << <blocks, blockSize >> > (
+			V,
+			total_edge_sections,
+			current,
+			flat_edges,
+			cu_edge_sections,
+			cu_edge_section_to_vertex,
+			arr_out_degree,
+			arr_pr,
+			sections_result
+			);
 
-	//	//for (int i = 0; i < total_edge_sections; ++i) {
-	//	//	cout << sections_result[i];
-	//	//	cout << endl;
-	//	//}
+		//for (int i = 0; i < total_edge_sections; ++i) {
+		//	cout << sections_result[i];
+		//	cout << endl;
+		//}
 
-	//	reduce_sections << <blocks, blockSize >> > (
-	//		V,
-	//		d,
-	//		next,
-	//		cu_vertex_section_starts,
-	//		arr_pr,
-	//		sections_result
-	//		);
+		reduce_sections << <blocks, blockSize >> > (
+			V,
+			d,
+			next,
+			cu_vertex_section_starts,
+			arr_pr,
+			sections_result
+			);
 
-	//	//cudaDeviceSynchronize();
+		//cudaDeviceSynchronize();
 
-	//	current = next;
-	//}
+		current = next;
+	}
 
 
 	// end stuff 
@@ -435,8 +428,8 @@ int main(int argc, char** argv) {
 	for (int i = 0; i < V; ++i) {
 		pr[current][i] = arr_pr[i + current * V];
 
-	/*	cout << arr_pr[i + current * V];
-		cout << endl;*/
+		/*	cout << arr_pr[i + current * V];
+			cout << endl;*/
 	}
 
 	for (int i = 0; i < V; ++i) {
